@@ -1,6 +1,9 @@
 
 ## アプリ名： Music Memories
 
+- 画面遷移図（Figmaで作成）のURL
+https://www.figma.com/design/Ge9YhCzTJh0uVjgfm35pNY/Music-Memories%E3%81%AE%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=73-28&m=draw
+
 ## 1. サービス概要
 このサービスは、好きな音楽への情熱を他人に共有するための音楽特化型SNSである。主に楽曲とアルバムについて語ることで、まだ自分の知らない音楽に出会える、音楽の奥深さを知ることができる場所を目指す。
 
