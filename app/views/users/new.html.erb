@@ -1,0 +1,49 @@
+<div class="signup-page">
+  <div class="signup-container">
+    <h1 class="signup-logo">Music Memories</h1>
+    <p class="signup-message">好きな音楽に、あなたの言葉を。</p>
+
+    <div class="signup-card">
+      <h2>新規登録</h2>
+      <p class="signup-description">アカウントを作成して、音楽の世界を広げよう</p>
+
+      <%= form_with model: @user, url: sign_up_path, local: true do |form| %>
+        <% if @user.errors.any? %>
+          <div class="signup-errors">
+            <p>入力内容を確認してください。</p>
+
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        
+        <div class="form-group">
+          <%= form.label :name, "ユーザー名" %>
+          <%= form.text_field :name, placeholder: "ユーザー名を入力" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :email, "メールアドレス" %>
+          <%= form.email_field :email, placeholder: "example@email.com" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :password, "パスワード" %>
+          <%= form.password_field :password, placeholder: "6文字以上で入力" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :password_confirmation, "確認用パスワード" %>
+          <%= form.password_field :password_confirmation, placeholder: "パスワードを再入力" %>
+        </div>
+
+        <div class="signup-submit">
+          <%= form.submit "アカウントを作成" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,53 @@
-<h1>Music Memories</h1>
-<p>音楽を通じて思い出を共有するサービスです。</p>
-<p>現在サービスを開発中です。完成まで今しばらくお待ちください。</p>
+<div class="home-page">
+  <header class="home-header">
+    <h1 class="home-logo">Music Memories</h1>
+    <nav>
+      <%= link_to "新規登録", sign_up_path, class: "home-header-button" %>
+    </nav>
+  </header>
+
+  <main>
+    <section class="home-hero">
+      <div class="home-record">♫</div>
+
+      <h2>音楽の思い出を、誰かと。</h2>
+
+      <p>
+        好きな曲、心に残ったアルバム。<br>
+        あなたの音楽体験を共有しよう。
+      </p>
+
+      <%= link_to "無料で始める", sign_up_path, class: "home-primary-button" %>
+    </section>
+
+    <section class="home-features">
+      <h2>Music Memoriesでできること</h2>
+
+      <div class="home-feature-grid">
+        <article class="home-feature-card">
+          <h3>♫ アルバムを語る</h3>
+          <p>曲順や世界観まで、自分の言葉で共有できます。</p>
+        </article>
+
+        <article class="home-feature-card">
+          <h3>♡ 共感でつながる</h3>
+          <p>いいねやコメントを通じて音楽好きと交流できます。</p>
+        </article>
+
+        <article class="home-feature-card">
+          <h3>♪ ランキングを作る</h3>
+          <p>お気に入りの音楽をランキングにまとめられます。</p>
+        </article>
+
+        <article class="home-feature-card">
+          <h3>✦ 新しい音楽に出会う</h3>
+          <p>誰かの投稿をきっかけに、知らなかった音楽を発見できます。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="home-footer">
+    <p>&copy; Music Memories</p>
+  </footer>
+</div>
