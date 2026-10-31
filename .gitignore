@@ -36,3 +36,15 @@
 # Installed gems
 /vendor/bundle/
 
+# Railsの秘密鍵
+/config/master.key
+/config/credentials/*.key
+
+# 環境変数ファイル
+.env
+.env.*
+!.env.example
+
+# ローカルのGem
+/vendor/bundle/
+
