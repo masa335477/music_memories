@@ -13,7 +13,7 @@ RUN apt-get update -qq && \
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-# Railsアプリをコピー
+# Railsアプリのコピー
 COPY . .
 
 # Renderとローカルで使用するポート
