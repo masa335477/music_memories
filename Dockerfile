@@ -6,7 +6,9 @@ RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
       build-essential \
       libpq-dev \
-      postgresql-client && \
+      postgresql-client \
+      chromium \
+      chromium-driver && \
     rm -rf /var/lib/apt/lists/*
 
 # Gemのインストール

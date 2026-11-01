@@ -1,10 +1,279 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* ========================================
+   トップページ
+======================================== */
+
+.home-page {
+  min-height: 100vh;
+  background-color: #010302;
+  color: #ecf4ed;
+  font-family: sans-serif;
+}
+
+/* ヘッダー */
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 6%;
+  border-bottom: 1px solid #304235;
+}
+
+.home-logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.home-header-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #a5bba7;
+  color: #010302;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* メインビジュアル */
+
+.home-hero {
+  text-align: center;
+  padding: 110px 20px;
+}
+
+.home-record {
+  font-size: 64px;
+  color: #a5bba7;
+  margin-bottom: 24px;
+}
+
+.home-hero h2 {
+  font-size: clamp(28px, 5vw, 44px);
+  margin-bottom: 20px;
+}
+
+.home-hero p {
+  font-size: 16px;
+  line-height: 1.9;
+  color: #a5bba7;
+  margin-bottom: 32px;
+}
+
+.home-primary-button {
+  display: inline-block;
+  padding: 15px 36px;
+  background-color: #a5bba7;
+  color: #010302;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.home-primary-button:hover,
+.home-header-button:hover {
+  background-color: #c4d8c6;
+}
+
+/* 機能紹介 */
+
+.home-features {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 24px 100px;
+}
+
+.home-features h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 40px;
+}
+
+.home-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.home-feature-card {
+  background-color: #1c2b22;
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid #304235;
+}
+
+.home-feature-card h3 {
+  color: #ecf4ed;
+  font-size: 19px;
+  margin-bottom: 16px;
+}
+
+.home-feature-card p {
+  color: #a5bba7;
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+/* フッター */
+
+.home-footer {
+  border-top: 1px solid #304235;
+  text-align: center;
+  padding: 24px;
+  color: #a5bba7;
+  font-size: 13px;
+}
+
+/* スマートフォン対応 */
+
+@media (max-width: 600px) {
+  .home-header {
+    padding: 16px 20px;
+  }
+
+  .home-logo {
+    font-size: 19px;
+  }
+
+  .home-header-button {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  .home-hero {
+    padding: 75px 20px;
+  }
+
+  .home-features {
+    padding: 20px 16px 70px;
+  }
+
+  .home-features h2 {
+    font-size: 23px;
+  }
+
+  .home-feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-feature-card {
+    padding: 24px;
+  }
+}
+
+.signup-page {
+  min-height: 100vh;
+  background-color: #010302;
+  color: #ecf4ed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 16px;
+  box-sizing: border-box;
+}
+
+.signup-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.signup-logo {
+  text-align: center;
+  font-size: 30px;
+  color: #ecf4ed;
+  margin-bottom: 8px;
+}
+
+.signup-message {
+  text-align: center;
+  color: #ecf4ed;
+  margin-bottom: 30px;
+}
+
+.signup-card {
+  background-color: #1c2b22;
+  padding: 32px;
+  border-radius: 16px;
+}
+
+.signup-card h2 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.signup-description {
+  text-align: center;
+  color: #ecf4ed;
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #a5bba7;
+  border-radius: 8px;
+  background-color: #101a14;
+  color: white;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: 2px solid #a5bba7;
+  border-color: transparent;
+}
+
+.signup-submit input {
+  width: 100%;
+  padding: 13px;
+  background-color: #a5bba7;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signup-submit input:hover {
+  background-color: #c4d8c6;
+}
+
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 24px 18px;
+  }
+}
+
+.flash-message {
+  padding: 14px 20px;
+  margin: 16px auto;
+  max-width: 600px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.flash-message.notice {
+  background-color: #1c2b22;
+  color: #ecf4ed;
+  border: 1px solid #a5bba7;
+}
+
+.flash-message.alert {
+  background-color: #382323;
+  color: #ffd5d5;
+  border: 1px solid #b66b6b;
+}

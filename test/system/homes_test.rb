@@ -2,10 +2,11 @@ require "application_system_test_case"
 
 class HomesTest < ApplicationSystemTestCase
   test "ホーム画面が正常に表示される" do
-    visit root_path
+    visit root_url
 
-    assert_selector "h1", text: "Music Memories"
-    assert_text "音楽を通じて思い出を共有するサービスです。"
-    assert_text "現在サービスを開発中です。完成まで今しばらくお待ちください。"
+    assert_text "好きな音楽に、あなたの言葉を。"
+    assert_text "Music Memoriesでできること"
+    assert_link "新規登録", href: sign_up_path
+    assert_link "無料で始める", href: sign_up_path
   end
 end
