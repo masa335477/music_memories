@@ -1,12 +1,39 @@
 <div class="home-page">
   <header class="home-header">
     <h1 class="home-logo">Music Memories</h1>
-    <nav>
-      <%= link_to "新規登録", sign_up_path, class: "home-header-button" %>
-    </nav>
+    <nav class="home-header-nav">
+    <% if logged_in? %>
+      <span class="home-user-name">
+        <%= current_user.name %>さん
+      </span>
+
+      <%= button_to "ログアウト", logout_path,
+          method: :delete,
+          class: "home-header-button" %>
+    <% else %>
+      <%= link_to "ログイン", login_path,
+          class: "home-header-button" %>
+      <%= link_to "新規登録", sign_up_path,
+          class: "home-header-button" %>
+    <% end %>
+      
   </header>
 
+  <%= render "shared/flash" %>
+
   <main>
+    <% if logged_in? %>
+    <section class="home-hero">
+      <div class="home-record">♫</div>
+
+      <h2>おかえりなさい、<%= current_user.name %>さん！</h2>
+
+      <p>
+        今日も好きな音楽について語りましょう。<br>
+        あなたの音楽体験を、ここから広げていきましょう。
+      </p>
+    </section>
+  <% else %>
     <section class="home-hero">
       <div class="home-record">♫</div>
 
@@ -17,34 +44,38 @@
         あなたの音楽体験を共有しよう。
       </p>
 
-      <%= link_to "無料で始める", sign_up_path, class: "home-primary-button" %>
+      <%= link_to "無料で始める", sign_up_path,
+          class: "home-primary-button" %>
     </section>
+  <% end %>
+  
+    <% unless logged_in? %>
+      <section class="home-features">
+        <h2>Music Memoriesでできること</h2>
 
-    <section class="home-features">
-      <h2>Music Memoriesでできること</h2>
+        <div class="home-feature-grid">
+          <article class="home-feature-card">
+            <h3>♫ アルバムを語る</h3>
+            <p>曲順や世界観まで、自分の言葉で共有できます。</p>
+          </article>
 
-      <div class="home-feature-grid">
-        <article class="home-feature-card">
-          <h3>♫ アルバムを語る</h3>
-          <p>曲順や世界観まで、自分の言葉で共有できます。</p>
-        </article>
+          <article class="home-feature-card">
+            <h3>♡ 共感でつながる</h3>
+            <p>いいねやコメントを通じて音楽好きと交流できます。</p>
+          </article>
 
-        <article class="home-feature-card">
-          <h3>♡ 共感でつながる</h3>
-          <p>いいねやコメントを通じて音楽好きと交流できます。</p>
-        </article>
+          <article class="home-feature-card">
+            <h3>♪ ランキングを作る</h3>
+            <p>お気に入りの音楽をランキングにまとめられます。</p>
+          </article>
 
-        <article class="home-feature-card">
-          <h3>♪ ランキングを作る</h3>
-          <p>お気に入りの音楽をランキングにまとめられます。</p>
-        </article>
-
-        <article class="home-feature-card">
-          <h3>✦ 新しい音楽に出会う</h3>
-          <p>誰かの投稿をきっかけに、知らなかった音楽を発見できます。</p>
-        </article>
-      </div>
-    </section>
+          <article class="home-feature-card">
+            <h3>✦ 新しい音楽に出会う</h3>
+            <p>誰かの投稿をきっかけに、知らなかった音楽を発見できます。</p>
+          </article>
+        </div>
+      </section>
+    <% end %>
   </main>
 
   <footer class="home-footer">
