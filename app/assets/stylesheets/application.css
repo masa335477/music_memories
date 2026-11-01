@@ -266,14 +266,34 @@
   text-align: center;
 }
 
-.flash-message.notice {
-  background-color: #1c2b22;
-  color: #ecf4ed;
-  border: 1px solid #a5bba7;
+/* 成功メッセージ */
+.home-page .flash-message.notice {
+  background-color: #1c3026;
+  color: #ffffff;
+  border: 1px solid #a8c0ac;
 }
 
-.flash-message.alert {
-  background-color: #382323;
-  color: #ffd5d5;
-  border: 1px solid #b66b6b;
+/* エラーメッセージ */
+.home-page .flash-message.alert {
+  background-color: #3b2020;
+  color: #ffffff;
+  border: 1px solid #d9a0a0;
+}
+
+/* ヘッダー内のナビゲーション */
+.home-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ログインユーザー名 */
+.home-user-name {
+  color: #ecf4ed;
+  font-size: 16px;
+}
+
+/* ログアウトボタンのフォーム */
+.home-header-nav form {
+  margin: 0;
 }
