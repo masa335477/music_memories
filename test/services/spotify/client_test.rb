@@ -2,6 +2,24 @@ require "test_helper"
 
 module Spotify
   class ClientTest < ActiveSupport::TestCase
+    setup do
+      @original_credentials_method = Rails.application.credentials.method(:spotify)
+
+      Rails.application.credentials.define_singleton_method(:spotify) do
+        {
+          client_id: "test_client_id",
+          client_secret: "test_client_secret"
+        }
+      end
+    end
+
+    teardown do
+      Rails.application.credentials.define_singleton_method(
+        :spotify,
+        @original_credentials_method
+      )
+    end
+
     test "アクセストークンを取得できる" do
       response = Object.new
 
