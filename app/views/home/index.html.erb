@@ -1,54 +1,57 @@
+
 <div class="home-page">
   <header class="home-header">
     <h1 class="home-logo">Music Memories</h1>
-    <nav class="home-header-nav">
-    <% if logged_in? %>
-      <span class="home-user-name">
-        <%= current_user.name %>さん
-      </span>
 
-      <%= button_to "ログアウト", logout_path,
-          method: :delete,
-          class: "home-header-button" %>
-    <% else %>
-      <%= link_to "ログイン", login_path,
-          class: "home-header-button" %>
-      <%= link_to "新規登録", sign_up_path,
-          class: "home-header-button" %>
-    <% end %>
-      
+    <nav class="home-header-nav">
+      <% if logged_in? %>
+        <span class="home-user-name">
+          <%= current_user.name %>さん
+        </span>
+
+        <%= button_to "ログアウト", logout_path,
+              method: :delete,
+              class: "home-header-button" %>
+      <% else %>
+        <%= link_to "ログイン", login_path,
+              class: "home-header-button" %>
+
+        <%= link_to "新規登録", sign_up_path,
+              class: "home-header-button" %>
+      <% end %>
+    </nav>
   </header>
 
   <%= render "shared/flash" %>
 
   <main>
     <% if logged_in? %>
-    <section class="home-hero">
-      <div class="home-record">♫</div>
+      <section class="home-hero">
+        <div class="home-record">♫</div>
 
-      <h2>おかえりなさい、<%= current_user.name %>さん！</h2>
+        <h2>おかえりなさい、<%= current_user.name %>さん！</h2>
 
-      <p>
-        今日も好きな音楽について語りましょう。<br>
-        あなたの音楽体験を、ここから広げていきましょう。
-      </p>
-    </section>
-  <% else %>
-    <section class="home-hero">
-      <div class="home-record">♫</div>
+        <p>
+          今日も好きな音楽について語りましょう。<br>
+          あなたの音楽体験を、ここから広げていきましょう。
+        </p>
+      </section>
+    <% else %>
+      <section class="home-hero">
+        <div class="home-record">♫</div>
 
-      <h2>好きな音楽に、あなたの言葉を。</h2>
+        <h2>好きな音楽に、あなたの言葉を。</h2>
 
-      <p>
-        好きな曲、心に残ったアルバム。<br>
-        あなたの音楽体験を共有しよう。
-      </p>
+        <p>
+          好きな曲、心に残ったアルバム。<br>
+          あなたの音楽体験を共有しよう。
+        </p>
 
-      <%= link_to "無料で始める", sign_up_path,
-          class: "home-primary-button" %>
-    </section>
-  <% end %>
-  
+        <%= link_to "無料で始める", sign_up_path,
+              class: "home-primary-button" %>
+      </section>
+    <% end %>
+
     <% unless logged_in? %>
       <section class="home-features">
         <h2>Music Memoriesでできること</h2>
