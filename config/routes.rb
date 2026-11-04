@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "songs", to: "songs#index"
   # ログイン/ログアウト
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"

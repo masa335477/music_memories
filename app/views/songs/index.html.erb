@@ -1,0 +1,111 @@
+
+<div class="songs-page">
+  <div class="songs-container">
+    <h1>楽曲検索</h1>
+    <p>好きな楽曲やアーティストを検索してみましょう。</p>
+
+    <%= form_with url: songs_path, method: :get, local: true, class: "songs-filter-form" do |form| %>
+      <div class="songs-filter-field">
+        <%= form.label :q, "フリーワード" %>
+        <%= form.search_field :q,
+              value: @query,
+              placeholder: "楽曲名・アーティスト名を入力",
+              class: "songs-search-input" %>
+      </div>
+
+      <details class="songs-advanced-search" <%= "open" if [@artist, @album, @year].any?(&:present?) %>>
+        <summary class="songs-advanced-toggle">
+          詳細検索
+        </summary>
+
+        <div class="songs-filter-fields">
+          <div class="songs-filter-field">
+            <%= form.label :artist, "アーティスト名" %>
+            <%= form.text_field :artist,
+                  value: @artist,
+                  placeholder: "例：スピッツ",
+                  class: "songs-search-input" %>
+          </div>
+
+          <div class="songs-filter-field">
+            <%= form.label :album, "アルバム名" %>
+            <%= form.text_field :album,
+                  value: @album,
+                  placeholder: "例：ハチミツ",
+                  class: "songs-search-input" %>
+          </div>
+
+          <div class="songs-filter-field">
+            <%= form.label :year, "リリース年" %>
+            <%= form.text_field :year,
+                  value: @year,
+                  placeholder: "例：1995",
+                  class: "songs-search-input" %>
+          </div>
+        </div>
+      </details>
+
+      <%= form.submit "検索", class: "songs-search-button" %>
+    <% end %>
+
+    <% if [@query, @artist, @album, @year].any?(&:present?) %>
+      <h2>検索結果</h2>
+
+      <% if @tracks.any? %>
+        <div class="songs-results">
+          <% @tracks.each do |track| %>
+            <div class="song-card">
+              <% image_url = track.dig("album", "images")&.first&.dig("url") %>
+
+              <% if image_url.present? %>
+                <%= image_tag image_url, alt: "アルバムジャケット", class: "song-image" %>
+              <% end %>
+
+              <div class="song-info">
+                <h3><%= track["name"] %></h3>
+                <p><%= track["artists"]&.map { |artist| artist["name"] }&.join(", ") %></p>
+                <p><%= track.dig("album", "name") %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <% if @total_pages > 1 %>
+          <div class="songs-pagination">
+            <% if @page > 1 %>
+              <%= link_to "← 前ページ",
+                    songs_path(
+                      q: @query,
+                      artist: @artist,
+                      album: @album,
+                      year: @year,
+                      page: @page - 1
+                    ),
+                    class: "pagination-button" %>
+            <% end %>
+
+            <span class="pagination-current">
+              <%= @page %> / <%= @total_pages %> ページ
+            </span>
+
+            <% if @page < @total_pages %>
+              <%= link_to "次ページ →",
+                    songs_path(
+                      q: @query,
+                      artist: @artist,
+                      album: @album,
+                      year: @year,
+                      page: @page + 1
+                    ),
+                    class: "pagination-button" %>
+            <% end %>
+          </div>
+        <% end %>
+
+      <% elsif flash.now[:alert].blank? %>
+        <p>該当する楽曲が見つかりませんでした。</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
