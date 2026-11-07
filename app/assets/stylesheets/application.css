@@ -1,3 +1,4 @@
+
 /* ========================================
    トップページ
 ======================================== */
@@ -162,6 +163,10 @@
   }
 }
 
+/* ========================================
+   新規登録画面
+======================================== */
+
 .signup-page {
   min-height: 100vh;
   background-color: #010302;
@@ -257,6 +262,10 @@
   }
 }
 
+/* ========================================
+   フラッシュメッセージ
+======================================== */
+
 .flash-message {
   padding: 14px 20px;
   margin: 16px auto;
@@ -267,6 +276,7 @@
 }
 
 /* 成功メッセージ */
+
 .home-page .flash-message.notice {
   background-color: #1c3026;
   color: #ffffff;
@@ -274,6 +284,7 @@
 }
 
 /* エラーメッセージ */
+
 .home-page .flash-message.alert {
   background-color: #3b2020;
   color: #ffffff;
@@ -281,6 +292,7 @@
 }
 
 /* ヘッダー内のナビゲーション */
+
 .home-header-nav {
   display: flex;
   align-items: center;
@@ -288,48 +300,70 @@
 }
 
 /* ログインユーザー名 */
+
 .home-user-name {
   color: #ecf4ed;
   font-size: 16px;
 }
 
 /* ログアウトボタンのフォーム */
+
 .home-header-nav form {
   margin: 0;
 }
 
+/* ========================================
+   楽曲・アルバム検索 共通CSS
+======================================== */
 
-/* 楽曲検索画面 */
-.songs-page {
+/* ページ全体 */
+
+.search-page {
   min-height: 100vh;
   background-color: #010302;
   color: #ecf4ed;
   padding: 48px 20px;
+  box-sizing: border-box;
 }
 
-.songs-container {
+.search-container {
   max-width: 900px;
   margin: 0 auto;
 }
 
-.songs-container h1 {
+.search-container h1 {
   font-size: 32px;
   margin-bottom: 12px;
 }
 
-.songs-container > p {
+.search-container > p {
   color: #b5c4b8;
   margin-bottom: 28px;
 }
 
-.songs-search-form {
+/* 検索フォーム */
+
+.search-filter-form {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 36px;
 }
 
-.songs-search-input {
-  flex: 1;
+.search-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-filter-field label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ecf4ed;
+}
+
+.search-input {
+  width: 100%;
   min-width: 0;
   padding: 14px;
   border: 1px solid #48604d;
@@ -337,9 +371,18 @@
   background-color: #1c2b22;
   color: #ecf4ed;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
-.songs-search-button {
+.search-input:focus {
+  outline: 2px solid #81c99a;
+  outline-offset: 2px;
+}
+
+/* 検索ボタン */
+
+.search-button {
+  align-self: flex-start;
   padding: 14px 28px;
   border: none;
   border-radius: 8px;
@@ -347,19 +390,67 @@
   color: #ffffff;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.songs-search-button:hover {
+.search-button:hover {
   background-color: #4c9864;
 }
 
-.songs-results {
+/* 詳細検索 */
+
+.search-advanced-search {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-advanced-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #81c99a;
+  font-weight: bold;
+  cursor: pointer;
+  list-style: none;
+}
+
+.search-advanced-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.search-advanced-toggle::before {
+  content: "+";
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #81c99a;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.search-advanced-search[open] .search-advanced-toggle::before {
+  content: "−";
+}
+
+.search-filter-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* 検索結果 */
+
+.search-results {
   display: grid;
   gap: 16px;
   margin-top: 24px;
 }
 
-.song-card {
+.search-card {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -368,41 +459,33 @@
   background-color: #1c2b22;
 }
 
-.song-image {
+.search-image {
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
-.song-info h3 {
+.search-info {
+  min-width: 0;
+}
+
+.search-info h3 {
   margin: 0 0 8px;
   font-size: 20px;
+  overflow-wrap: anywhere;
 }
 
-.song-info p {
+.search-info p {
   margin: 4px 0;
   color: #b5c4b8;
+  overflow-wrap: anywhere;
 }
 
-@media (max-width: 600px) {
-  .songs-search-form {
-    flex-direction: column;
-  }
+/* ページネーション */
 
-  .song-image {
-    width: 72px;
-    height: 72px;
-  }
-
-  .song-info h3 {
-    font-size: 16px;
-  }
-}
-
-
-/* 楽曲検索ページネーション */
-.songs-pagination {
+.search-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -430,59 +513,44 @@
   font-size: 14px;
 }
 
+/* ========================================
+   検索画面 スマートフォン対応
+======================================== */
+
 @media (max-width: 600px) {
-  .songs-pagination {
+  .search-page {
+    padding: 32px 16px;
+  }
+
+  .search-container h1 {
+    font-size: 26px;
+  }
+
+  .search-filter-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .search-card {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .search-image {
+    width: 72px;
+    height: 72px;
+  }
+
+  .search-info h3 {
+    font-size: 16px;
+  }
+
+  .search-pagination {
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .pagination-button {
     padding: 10px 12px;
     font-size: 13px;
   }
-}
-
-
-/* 詳細検索の開閉 */
-.songs-advanced-search {
-  width: 100%;
-}
-
-.songs-advanced-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #81c99a;
-  font-weight: bold;
-  cursor: pointer;
-  list-style: none;
-}
-
-.songs-advanced-toggle::-webkit-details-marker {
-  display: none;
-}
-
-.songs-advanced-toggle::before {
-  content: "+";
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 22px;
-  height: 22px;
-  border: 2px solid #81c99a;
-  border-radius: 50%;
-  font-size: 18px;
-  line-height: 1;
-}
-
-.songs-advanced-search[open] .songs-advanced-toggle::before {
-  content: "−";
-}
-
-.songs-advanced-search .songs-filter-fields {
-  margin-top: 20px;
-}
-
-/* 詳細検索と検索ボタンの間隔を調整 */
-.songs-advanced-search {
-  margin-bottom: 20px;
 }

@@ -1,4 +1,3 @@
-
 require "net/http"
 require "json"
 
@@ -35,7 +34,34 @@ module Spotify
       JSON.parse(response.body).fetch("access_token")
     end
 
+
     def search_tracks(query, limit: 10, offset: 0, artist: nil, album: nil, year: nil)
+      search(
+        query,
+        type: "track",
+        limit: limit,
+        offset: offset,
+        artist: artist,
+        album: album,
+        year: year
+      )
+    end
+
+    def search_albums(query, limit: 10, offset: 0, artist: nil, album: nil, year: nil)
+      search(
+        query,
+        type: "album",
+        limit: limit,
+        offset: offset,
+        artist: artist,
+        album: album,
+        year: year
+      )
+    end
+
+    private
+
+    def search(query, type:, limit:, offset:, artist:, album:, year:)
       search_terms = []
 
       search_terms << query if query.present?
@@ -44,13 +70,14 @@ module Spotify
       search_terms << "year:#{year}" if year.present?
 
       search_query = search_terms.join(" ")
+
       uri = SEARCH_URL.dup
       uri.query = URI.encode_www_form(
         q: search_query,
-        type: "track",
+        type: type,
         limit: limit,
         offset: offset
-  )
+      )
 
       request = Net::HTTP::Get.new(uri)
       request["Authorization"] = "Bearer #{access_token}"
@@ -66,10 +93,10 @@ module Spotify
       end
 
       unless response.is_a?(Net::HTTPSuccess)
-        raise "Spotify楽曲検索に失敗しました（HTTP #{response.code}）"
+        raise "Spotify検索に失敗しました（HTTP #{response.code}）"
       end
 
-      JSON.parse(response.body).fetch("tracks")
+      JSON.parse(response.body).fetch("#{type}s")
     end
   end
 end
