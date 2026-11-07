@@ -10,14 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_31_152838) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_07_095447) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "albums", force: :cascade do |t|
+    t.string "spotify_id", null: false
+    t.string "name", null: false
+    t.string "artist_name"
+    t.string "release_date"
+    t.string "image_url"
+    t.string "spotify_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["spotify_id"], name: "index_albums_on_spotify_id", unique: true
+  end
 
   create_table "memories", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "songs", force: :cascade do |t|
+    t.string "spotify_id", null: false
+    t.string "name", null: false
+    t.string "artist_name"
+    t.string "album_name"
+    t.string "image_url"
+    t.string "spotify_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["spotify_id"], name: "index_songs_on_spotify_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
