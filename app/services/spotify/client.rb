@@ -5,6 +5,8 @@ module Spotify
   class Client
     TOKEN_URL = URI("https://accounts.spotify.com/api/token")
     SEARCH_URL = URI("https://api.spotify.com/v1/search")
+    TRACK_URL = "https://api.spotify.com/v1/tracks"
+    ALBUM_URL = "https://api.spotify.com/v1/albums"
 
     def access_token
       credentials = Rails.application.credentials.spotify
@@ -59,6 +61,14 @@ module Spotify
       )
     end
 
+    def get_track(spotify_id)
+      get_item(TRACK_URL, spotify_id)
+    end
+
+    def get_album(spotify_id)
+      get_item(ALBUM_URL, spotify_id)
+    end
+
     private
 
     def search(query, type:, limit:, offset:, artist:, album:, year:)
@@ -97,6 +107,33 @@ module Spotify
       end
 
       JSON.parse(response.body).fetch("#{type}s")
+    end
+
+    def get_item(base_url, spotify_id)
+      unless spotify_id.to_s.match?(/\A[A-Za-z0-9]{22}\z/)
+        raise ArgumentError, "Spotify IDの形式が正しくありません"
+      end
+
+      uri = URI("#{base_url}/#{spotify_id}")
+
+      request = Net::HTTP::Get.new(uri)
+      request["Authorization"] = "Bearer #{access_token}"
+
+      response = Net::HTTP.start(
+        uri.hostname,
+        uri.port,
+        use_ssl: true,
+        open_timeout: 5,
+        read_timeout: 10
+      ) do |http|
+        http.request(request)
+      end
+
+      unless response.is_a?(Net::HTTPSuccess)
+        raise "Spotify情報の取得に失敗しました（HTTP #{response.code}）"
+      end
+
+      JSON.parse(response.body)
     end
   end
 end
