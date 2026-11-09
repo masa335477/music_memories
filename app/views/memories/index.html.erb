@@ -1,0 +1,25 @@
+<h1>投稿一覧</h1>
+
+<% if @memories.empty? %>
+  <p>まだ投稿がありません。</p>
+<% else %>
+  <div class="memories-list">
+    <% @memories.each do |memory| %>
+      <article class="memory-card">
+        <h2><%= link_to memory.title, memory_path(memory) %></h2>
+
+        <p>投稿者：<%= memory.user.name %></p>
+
+        <time datetime="<%= memory.created_at.iso8601 %>">
+          <%= memory.created_at.strftime("%Y/%m/%d %H:%M") %>
+        </time>
+
+        <div class="memory-body">
+          <%= simple_format(memory.body) %>
+        </div>
+
+        <%= render "music_info", memory: memory %>
+      </article>
+    <% end %>
+  </div>
+<% end %>

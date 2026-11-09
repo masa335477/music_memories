@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_07_112622) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_09_142101) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,6 +35,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_112622) do
     t.index ["user_id"], name: "index_memories_on_user_id"
   end
 
+  create_table "memory_albums", force: :cascade do |t|
+    t.bigint "memory_id", null: false
+    t.bigint "album_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["album_id"], name: "index_memory_albums_on_album_id"
+    t.index ["memory_id", "album_id"], name: "index_memory_albums_on_memory_id_and_album_id", unique: true
+    t.index ["memory_id"], name: "index_memory_albums_on_memory_id"
+  end
+
+  create_table "memory_songs", force: :cascade do |t|
+    t.bigint "memory_id", null: false
+    t.bigint "song_id", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id", "song_id"], name: "index_memory_songs_on_memory_id_and_song_id", unique: true
+    t.index ["memory_id"], name: "index_memory_songs_on_memory_id"
+    t.index ["song_id"], name: "index_memory_songs_on_song_id"
+  end
+
   create_table "songs", force: :cascade do |t|
     t.string "spotify_id", null: false
     t.string "name", null: false
@@ -57,4 +78,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_112622) do
   end
 
   add_foreign_key "memories", "users"
+  add_foreign_key "memory_albums", "albums"
+  add_foreign_key "memory_albums", "memories"
+  add_foreign_key "memory_songs", "memories"
+  add_foreign_key "memory_songs", "songs"
 end
