@@ -1,0 +1,33 @@
+<% unless memory.songs.empty? %>
+  <section class="memory-songs">
+    <h3>楽曲</h3>
+
+    <% memory.songs.each do |song| %>
+      <div class="memory-song">
+        <p>楽曲名：<%= song.name %></p>
+        <p>アーティスト：<%= song.artist_name %></p>
+
+        <% if song.album_name.present? %>
+          <p>収録アルバム：<%= song.album_name %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+<% end %>
+
+<% unless memory.albums.empty? %>
+  <section class="memory-albums">
+    <h3>アルバム</h3>
+
+    <% memory.albums.each do |album| %>
+      <div class="memory-album">
+        <p>アルバム名：<%= album.name %></p>
+        <p>アーティスト：<%= album.artist_name %></p>
+
+        <% if album.release_date.present? %>
+          <p>発売日：<%= album.release_date %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+<% end %>

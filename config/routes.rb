@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :memories, only: [ :index, :show ]
   get "albums", to: "albums#index"
   get "songs", to: "songs#index"
   # ログイン/ログアウト
