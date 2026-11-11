@@ -1,32 +1,51 @@
-<% unless memory.songs.empty? %>
+
+<% if memory.songs.any? %>
   <section class="memory-songs">
     <h3>楽曲</h3>
 
     <% memory.songs.each do |song| %>
-      <div class="memory-song">
-        <p>楽曲名：<%= song.name %></p>
-        <p>アーティスト：<%= song.artist_name %></p>
-
-        <% if song.album_name.present? %>
-          <p>収録アルバム：<%= song.album_name %></p>
+      <div class="memory-song memory-music-card">
+        <% if song.image_url.present? %>
+          <%= image_tag song.image_url,
+                        alt: "#{song.name}のジャケット",
+                        class: "memory-music-image",
+                        loading: "lazy" %>
         <% end %>
+
+        <div class="memory-music-info">
+          <p>楽曲名：<%= song.name %></p>
+          <p>アーティスト：<%= song.artist_name %></p>
+
+          <% if song.album_name.present? %>
+            <p>収録アルバム：<%= song.album_name %></p>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </section>
 <% end %>
 
-<% unless memory.albums.empty? %>
+<% if memory.albums.any? %>
   <section class="memory-albums">
     <h3>アルバム</h3>
 
     <% memory.albums.each do |album| %>
-      <div class="memory-album">
-        <p>アルバム名：<%= album.name %></p>
-        <p>アーティスト：<%= album.artist_name %></p>
-
-        <% if album.release_date.present? %>
-          <p>発売日：<%= album.release_date %></p>
+      <div class="memory-album memory-music-card">
+        <% if album.image_url.present? %>
+          <%= image_tag album.image_url,
+                        alt: "#{album.name}のジャケット",
+                        class: "memory-music-image",
+                        loading: "lazy" %>
         <% end %>
+
+        <div class="memory-music-info">
+          <p>アルバム名：<%= album.name %></p>
+          <p>アーティスト：<%= album.artist_name %></p>
+
+          <% if album.release_date.present? %>
+            <p>発売日：<%= album.release_date %></p>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </section>

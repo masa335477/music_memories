@@ -1,0 +1,31 @@
+<main class="memories-page">
+  <div class="memories-container">
+    <header class="memories-page-header">
+      <h1 class="home-logo">
+        <%= link_to "Music Memories", root_path, class: "home-logo-link" %>
+      </h1>
+      <span class="memories-page-title">投稿詳細</span>
+    </header>
+
+    <article class="memory-card memory-detail">
+      <h2><%= @memory.title %></h2>
+
+      <div class="memory-meta">
+        <span>投稿者：<%= @memory.user.name %></span>
+        <time datetime="<%= @memory.created_at.iso8601 %>">
+          <%= @memory.created_at.strftime("%Y/%m/%d %H:%M") %>
+        </time>
+      </div>
+
+      <div class="memory-body">
+        <%= simple_format(@memory.body) %>
+      </div>
+
+      <%= render "music_info", memory: @memory %>
+    </article>
+
+    <nav class="memory-navigation" aria-label="ページ移動">
+      <%= link_to "投稿一覧に戻る", memories_path, class: "memories-button" %>
+    </nav>
+  </div>
+</main>
