@@ -26,6 +26,17 @@
   margin: 0;
 }
 
+/* ロゴのリンク */
+
+.home-logo-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-logo-link:hover {
+  color: #c4d8c6;
+}
+
 .home-header-button {
   display: inline-block;
   padding: 10px 20px;
@@ -552,5 +563,257 @@
   .pagination-button {
     padding: 10px 12px;
     font-size: 13px;
+  }
+}
+
+/* ========================================
+   投稿一覧・投稿詳細 共通CSS
+======================================== */
+
+/* ページ全体 */
+
+.memories-page {
+  min-height: 100vh;
+  background-color: #010302;
+  color: #ecf4ed;
+  padding: 48px 20px;
+  box-sizing: border-box;
+}
+
+.memories-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ヘッダー */
+
+.memories-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.memories-page-header h1 {
+  margin: 0;
+}
+
+/* ページタイトル */
+
+.memories-page-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ecf4ed;
+}
+
+/* 投稿一覧 */
+
+.memories-list {
+  display: grid;
+  gap: 24px;
+}
+
+.memory-card {
+  padding: 28px;
+  background-color: #1c2b22;
+  border: 1px solid #304235;
+  border-radius: 16px;
+}
+
+.memory-card h2 {
+  font-size: 24px;
+  margin: 0 0 16px;
+  overflow-wrap: anywhere;
+}
+
+.memory-card h2 a {
+  color: #ecf4ed;
+  text-decoration: none;
+}
+
+.memory-card h2 a:hover {
+  color: #81c99a;
+}
+
+/* 投稿者・投稿日時 */
+
+.memory-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  color: #a5bba7;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* 投稿本文 */
+
+.memory-body {
+  color: #ecf4ed;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  margin-bottom: 28px;
+}
+
+.memory-body p {
+  margin: 0 0 12px;
+}
+
+/* 楽曲・アルバム情報 */
+
+.memory-songs,
+.memory-albums {
+  margin-top: 24px;
+}
+
+.memory-songs h3,
+.memory-albums h3 {
+  font-size: 18px;
+  color: #81c99a;
+  margin-bottom: 16px;
+}
+
+.memory-song,
+.memory-album {
+  padding: 18px;
+  margin-bottom: 12px;
+  background-color: #101a14;
+  border-radius: 10px;
+  border: 1px solid #304235;
+}
+
+.memory-song p,
+.memory-album p {
+  color: #b5c4b8;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+/* 楽曲・アルバムのジャケット表示 */
+
+.memory-music-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.memory-music-image {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.memory-music-info {
+  min-width: 0;
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .memory-music-card {
+    gap: 12px;
+  }
+
+  .memory-music-image {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* 詳細へのリンク */
+
+.memory-detail-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #81c99a;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.memory-detail-link:hover {
+  text-decoration: underline;
+}
+
+/* 投稿詳細画面 */
+
+.memory-detail {
+  margin-bottom: 24px;
+}
+
+.memory-navigation {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ボタン */
+
+.memories-button {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #3e8054;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.memories-button:hover {
+  background-color: #4c9864;
+}
+
+/* 投稿が存在しない場合 */
+
+.memories-empty {
+  padding: 32px;
+  text-align: center;
+  background-color: #1c2b22;
+  border-radius: 12px;
+  color: #b5c4b8;
+}
+
+/* ========================================
+   投稿画面 スマートフォン対応
+======================================== */
+
+@media (max-width: 600px) {
+  .memories-page {
+    padding: 32px 16px;
+  }
+
+  .memories-page-header {
+    gap: 12px;
+  }
+
+  .memories-page-title {
+    font-size: 16px;
+  }
+
+  .memory-card {
+    padding: 20px 16px;
+  }
+
+  .memory-card h2 {
+    font-size: 20px;
+  }
+
+  .memory-meta {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .memory-song,
+  .memory-album {
+    padding: 14px;
+  }
+
+  .memories-button {
+    padding: 10px 16px;
+    font-size: 14px;
   }
 }

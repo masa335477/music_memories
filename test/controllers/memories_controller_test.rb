@@ -1,3 +1,4 @@
+
 require "test_helper"
 
 class MemoriesControllerTest < ActionDispatch::IntegrationTest
@@ -11,11 +12,11 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     get memories_path
 
     assert_response :success
-    assert_select "h1", text: "投稿一覧"
+    assert_select ".memories-page-title", text: "投稿一覧"
 
     assert_select "article.memory-card" do
       assert_select "h2 a[href=?]", memory_path(memory), text: memory.title
-      assert_select "p", text: "投稿者：#{memory.user.name}"
+      assert_select ".memory-meta span", text: "投稿者：#{memory.user.name}"
       assert_select ".memory-body p", text: memory.body
     end
   end
@@ -73,7 +74,7 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select "article.memory-card",
-                text: /#{Regexp.escape(memory.title)}/ do
+                  text: /#{Regexp.escape(memory.title)}/ do
       assert_select ".memory-song" do
         assert_select "p", text: "楽曲名：テスト楽曲"
         assert_select "p", text: "アーティスト：楽曲アーティスト"
@@ -86,5 +87,69 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
         assert_select "p", text: "発売日：2026-11-09"
       end
     end
+  end
+
+  test "未ログインでも投稿詳細を閲覧できる" do
+    memory = memories(:one)
+    memory.update!(
+      title: "思い出のアルバム",
+      body: "曲順も含めて大好きな作品です。"
+    )
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".memories-page-title", text: "投稿詳細"
+
+    assert_select "article.memory-card" do
+      assert_select "h2", text: memory.title
+      assert_select ".memory-meta", text: /#{Regexp.escape(memory.user.name)}/
+      assert_select ".memory-body p", text: memory.body
+    end
+  end
+
+
+  test "投稿詳細に紐付いた楽曲とアルバムのジャケット画像を表示する" do
+    memory = memories(:one)
+
+    song = Song.create!(
+      spotify_id: "detail_test_song",
+      name: "詳細テスト楽曲",
+      artist_name: "楽曲アーティスト",
+      album_name: "収録アルバム",
+      image_url: "https://example.com/song.jpg"
+    )
+
+    album = Album.create!(
+      spotify_id: "detail_test_album",
+      name: "詳細テストアルバム",
+      artist_name: "アルバムアーティスト",
+      release_date: "2026-11-09",
+      image_url: "https://example.com/album.jpg"
+    )
+
+    memory.songs << song
+    memory.albums << album
+
+    get memory_path(memory)
+
+    assert_response :success
+
+    assert_select ".memory-song" do
+      assert_select "p", text: "楽曲名：詳細テスト楽曲"
+      assert_select "img.memory-music-image[src=?]", song.image_url
+    end
+
+    assert_select ".memory-album" do
+      assert_select "p", text: "アルバム名：詳細テストアルバム"
+      assert_select "img.memory-music-image[src=?]", album.image_url
+    end
+  end
+
+
+  test "存在しない投稿IDではRecordNotFoundが発生する" do
+    get memory_path(id: 999_999_999)
+
+    assert_response :not_found
   end
 end

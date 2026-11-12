@@ -1,25 +1,37 @@
-<h1>投稿一覧</h1>
+<main class="memories-page">
+  <div class="memories-container">
+    <header class="memories-page-header">
+      <h1 class="home-logo">
+        <%= link_to "Music Memories", root_path, class: "home-logo-link" %>
+      </h1>
+      <span class="memories-page-title">投稿一覧</span>
+    </header>
 
-<% if @memories.empty? %>
-  <p>まだ投稿がありません。</p>
-<% else %>
-  <div class="memories-list">
-    <% @memories.each do |memory| %>
-      <article class="memory-card">
-        <h2><%= link_to memory.title, memory_path(memory) %></h2>
+    <% if @memories.empty? %>
+      <p class="memories-empty">まだ投稿がありません。</p>
+    <% else %>
+      <div class="memories-list">
+        <% @memories.each do |memory| %>
+          <article class="memory-card">
+            <h2><%= link_to memory.title, memory_path(memory) %></h2>
 
-        <p>投稿者：<%= memory.user.name %></p>
+            <div class="memory-meta">
+              <span>投稿者：<%= memory.user.name %></span>
+              <time datetime="<%= memory.created_at.iso8601 %>">
+                <%= memory.created_at.strftime("%Y/%m/%d %H:%M") %>
+              </time>
+            </div>
 
-        <time datetime="<%= memory.created_at.iso8601 %>">
-          <%= memory.created_at.strftime("%Y/%m/%d %H:%M") %>
-        </time>
+            <div class="memory-body">
+              <%= simple_format(memory.body) %>
+            </div>
 
-        <div class="memory-body">
-          <%= simple_format(memory.body) %>
-        </div>
+            <%= render "music_info", memory: memory %>
 
-        <%= render "music_info", memory: memory %>
-      </article>
+            <%= link_to "投稿詳細を見る", memory_path(memory), class: "memory-detail-link" %>
+          </article>
+        <% end %>
+      </div>
     <% end %>
   </div>
-<% end %>
+</main>
