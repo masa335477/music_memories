@@ -25,7 +25,25 @@
     </article>
 
     <nav class="memory-navigation" aria-label="ページ移動">
-      <%= link_to "投稿一覧に戻る", memories_path, class: "memories-button" %>
+      <%= link_to "投稿一覧に戻る",
+            memories_path,
+            class: "memories-button" %>
+
+      <% if logged_in? && @memory.user_id == current_user.id %>
+        <%= link_to "編集する",
+              edit_memory_path(@memory),
+              class: "memories-button" %>
+
+        <%= button_to "削除する",
+              memory_path(@memory),
+              method: :delete,
+              form: {
+                data: {
+                  turbo_confirm: "この投稿を削除しますか？この操作は取り消せません。"
+                }
+              },
+              class: "memories-button" %>
+      <% end %>
     </nav>
   </div>
 </main>

@@ -103,41 +103,7 @@
         <% end %>
 
         <% if logged_in? %>
-          <%= form_with model: @memory,
-                local: true,
-                class: "memory-compose-form" do |form| %>
-            <%= form.hidden_field :spotify_track_id %>
-            <%= form.hidden_field :spotify_album_id %>
-
-            <div class="memory-compose-field">
-              <%= form.label :title do %>
-                タイトル
-                <span class="memory-compose-required">必須</span>
-              <% end %>
-
-              <%= form.text_field :title,
-                    placeholder: "例：何度でも聴きたくなる一枚",
-                    class: "memory-compose-input" %>
-            </div>
-
-            <div class="memory-compose-field">
-              <%= form.label :body do %>
-                感想・思い出
-                <span class="memory-compose-required">必須</span>
-              <% end %>
-
-              <%= form.text_area :body,
-                    rows: 10,
-                    placeholder: "この音楽の好きなところや、聴いたときの思い出を書いてみましょう。",
-                    class: "memory-compose-input memory-compose-textarea" %>
-            </div>
-
-            <div class="memory-compose-actions">
-              <p>投稿は公開されます。</p>
-              <%= form.submit "投稿する →",
-                    class: "memory-compose-submit" %>
-            </div>
-          <% end %>
+          <%= render "form", memory: @memory %>
         <% else %>
           <div class="login-notice">
             <p>投稿するにはログインしてください。</p>
