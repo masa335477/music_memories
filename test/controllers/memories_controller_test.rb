@@ -332,6 +332,535 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
                   text: "楽曲またはアルバムを1件選択してください"
   end
 
+  test "投稿者本人がタイトルと本文を更新できる" do
+    user = login_for_memory_test
+    song = create(:song)
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ song ],
+      title: "編集前のタイトル",
+      body: "編集前の本文"
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: "編集後のタイトル",
+        body: "編集後の本文",
+        spotify_track_id: song.spotify_id
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+
+    memory.reload
+
+    assert_equal "編集後のタイトル", memory.title
+    assert_equal "編集後の本文", memory.body
+    assert_equal [ song ], memory.songs.to_a
+    assert_equal "投稿を更新しました。", flash[:notice]
+  end
+
+  test "投稿に紐付く楽曲を別の楽曲へ変更できる" do
+    user = login_for_memory_test
+
+    old_song = create(:song)
+    new_song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ old_song ]
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: memory.title,
+        body: memory.body,
+        spotify_track_id: new_song.spotify_id
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+
+    memory.reload
+
+    assert_equal [ new_song ], memory.songs.to_a
+    assert_empty memory.albums
+    assert_equal "投稿を更新しました。", flash[:notice]
+
+    assert_equal 0, MemorySong.where(
+      memory_id: memory.id,
+      song_id: old_song.id
+    ).count
+  end
+
+
+  test "投稿に紐付く楽曲をアルバムへ変更できる" do
+    user = login_for_memory_test
+    song = create(:song)
+    album = create(:album)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ song ]
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: memory.title,
+        body: memory.body,
+        spotify_album_id: album.spotify_id
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+
+    memory.reload
+
+    assert_empty memory.songs
+    assert_equal [ album ], memory.albums.to_a
+    assert_equal 0, MemorySong.where(memory_id: memory.id).count
+    assert_equal 1, MemoryAlbum.where(memory_id: memory.id).count
+    assert_equal "投稿を更新しました。", flash[:notice]
+  end
+
+
+  test "更新に失敗した場合は投稿内容と音楽情報が維持される" do
+    user = login_for_memory_test
+    old_song = create(:song)
+    new_song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ old_song ],
+      title: "編集前のタイトル",
+      body: "編集前の本文"
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: "",
+        body: "編集後の本文",
+        spotify_track_id: new_song.spotify_id
+      }
+    }
+
+    assert_response :unprocessable_entity
+
+    assert_select "[role='alert'] li",
+                  text: "タイトルを入力してください"
+
+    memory.reload
+
+    assert_equal "編集前のタイトル", memory.title
+    assert_equal "編集前の本文", memory.body
+    assert_equal [ old_song ], memory.songs.reload.to_a
+    assert_empty memory.albums.reload
+    assert_equal 0, MemorySong.where(
+      memory_id: memory.id,
+      song_id: new_song.id
+    ).count
+  end
+
+
+  test "他人の投稿を更新できない" do
+    login_for_memory_test
+
+    other_user = create(:user)
+    song = create(:song)
+
+    memory = create(
+      :memory,
+      user: other_user,
+      songs: [ song ],
+      title: "他人の投稿",
+      body: "変更前の本文"
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: "不正に変更したタイトル",
+        body: "不正に変更した本文",
+        spotify_track_id: song.spotify_id
+      }
+    }
+
+    assert_redirected_to memories_path
+    assert_equal "指定された投稿は存在しないか、操作する権限がありません。", flash[:alert]
+
+    memory.reload
+
+    assert_equal "他人の投稿", memory.title
+    assert_equal "変更前の本文", memory.body
+    assert_equal [ song ], memory.songs.to_a
+  end
+
+  test "他人の投稿の編集画面にアクセスできない" do
+    login_for_memory_test
+
+    other_user = create(:user)
+    memory = create(:memory, user: other_user)
+
+    get edit_memory_path(memory)
+
+    assert_redirected_to memories_path
+    assert_equal "指定された投稿は存在しないか、操作する権限がありません。", flash[:alert]
+  end
+
+  test "未ログインでは投稿の編集画面にアクセスできない" do
+    memory = create(:memory)
+
+    get edit_memory_path(memory)
+
+    assert_redirected_to login_path
+    assert_equal "投稿するにはログインしてください。", flash[:alert]
+  end
+
+  test "未ログインでは投稿を更新できない" do
+    memory = create(
+      :memory,
+      title: "編集前のタイトル",
+      body: "編集前の本文"
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: "不正な更新",
+        body: "不正に変更された本文"
+      }
+    }
+
+    assert_redirected_to login_path
+
+    memory.reload
+
+    assert_equal "編集前のタイトル", memory.title
+    assert_equal "編集前の本文", memory.body
+  end
+
+
+  test "投稿者本人が投稿を削除できる" do
+    user = login_for_memory_test
+    song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ song ]
+    )
+
+    assert_difference "Memory.count", -1 do
+      assert_difference "MemorySong.count", -1 do
+        delete memory_path(memory)
+      end
+    end
+
+    assert_redirected_to memories_path
+    assert_equal "投稿を削除しました。", flash[:notice]
+
+    assert_nil Memory.find_by(id: memory.id)
+    assert Song.exists?(song.id)
+  end
+
+  test "他人の投稿を削除できない" do
+    login_for_memory_test
+
+    other_user = create(:user)
+    song = create(:song)
+
+    memory = create(
+      :memory,
+      user: other_user,
+      songs: [ song ]
+    )
+
+    assert_no_difference [ "Memory.count", "MemorySong.count" ] do
+      delete memory_path(memory)
+    end
+
+    assert_redirected_to memories_path
+    assert_equal "指定された投稿は存在しないか、操作する権限がありません。", flash[:alert]
+
+    assert Memory.exists?(memory.id)
+    assert_equal [ song ], memory.reload.songs.to_a
+  end
+
+
+  test "未ログインでは投稿を削除できない" do
+    song = create(:song)
+    memory = create(:memory, songs: [ song ])
+
+    assert_no_difference [ "Memory.count", "MemorySong.count" ] do
+      delete memory_path(memory)
+    end
+
+    assert_redirected_to login_path
+    assert_equal "投稿するにはログインしてください。", flash[:alert]
+
+    assert Memory.exists?(memory.id)
+    assert_equal [ song ], memory.reload.songs.to_a
+  end
+
+
+  test "アルバム付き投稿を削除すると関連付けも削除される" do
+    user = login_for_memory_test
+    album = create(:album)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [],
+      albums: [ album ]
+    )
+
+    assert_difference "Memory.count", -1 do
+      assert_difference "MemoryAlbum.count", -1 do
+        delete memory_path(memory)
+      end
+    end
+
+    assert_redirected_to memories_path
+    assert_equal "投稿を削除しました。", flash[:notice]
+
+    assert_not Memory.exists?(memory.id)
+    assert Album.exists?(album.id)
+  end
+
+
+  test "編集した内容が投稿一覧と詳細画面に反映される" do
+    user = login_for_memory_test
+    song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ song ],
+      title: "編集前のタイトル",
+      body: "編集前の本文"
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: "編集後のタイトル",
+        body: "編集後の本文",
+        spotify_track_id: song.spotify_id
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select "article.memory-card" do
+      assert_select "h2", text: "編集後のタイトル"
+      assert_select ".memory-body p", text: "編集後の本文"
+    end
+
+    get memories_path
+
+    assert_response :success
+    assert_select "article.memory-card" do
+      assert_select "h2", text: /編集後のタイトル/
+      assert_select ".memory-body p", text: "編集後の本文"
+    end
+
+    assert_select "h2", text: "編集前のタイトル", count: 0
+  end
+
+
+  test "削除した投稿が一覧と詳細画面に表示されない" do
+    user = login_for_memory_test
+    song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ song ],
+      title: "削除対象の投稿"
+    )
+
+    delete memory_path(memory)
+
+    assert_redirected_to memories_path
+
+    get memories_path
+
+    assert_response :success
+    assert_select "article.memory-card", text: /削除対象の投稿/, count: 0
+
+    get memory_path(memory)
+
+    assert_response :not_found
+  end
+
+
+  test "更新失敗時に入力内容と選択した楽曲を編集画面に保持する" do
+    user = login_for_memory_test
+    old_song = create(:song)
+    new_song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ old_song ],
+      title: "編集前のタイトル",
+      body: "編集前の本文"
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: "",
+        body: "入力途中の本文",
+        spotify_track_id: new_song.spotify_id
+      }
+    }
+
+    assert_response :unprocessable_entity
+
+    assert_select "[role='alert'] li",
+                  text: "タイトルを入力してください"
+
+    assert_select "textarea[name='memory[body]']",
+                  text: "入力途中の本文"
+
+    assert_select "input[name='memory[spotify_track_id]'][value=?]",
+                  new_song.spotify_id
+
+    assert_select ".memory-compose-music h3", text: new_song.name
+
+    memory.reload
+    assert_equal "編集前のタイトル", memory.title
+    assert_equal [ old_song ], memory.songs.to_a
+  end
+
+
+  test "投稿に紐付くアルバムを楽曲へ変更できる" do
+    user = login_for_memory_test
+    album = create(:album)
+    song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [],
+      albums: [ album ]
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: memory.title,
+        body: memory.body,
+        spotify_track_id: song.spotify_id
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+
+    memory.reload
+
+    assert_equal [ song ], memory.songs.to_a
+    assert_empty memory.albums
+    assert_equal 1, MemorySong.where(memory_id: memory.id).count
+    assert_equal 0, MemoryAlbum.where(memory_id: memory.id).count
+    assert_equal "投稿を更新しました。", flash[:notice]
+  end
+
+
+  test "投稿に紐付くアルバムを別のアルバムへ変更できる" do
+    user = login_for_memory_test
+    old_album = create(:album)
+    new_album = create(:album)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [],
+      albums: [ old_album ]
+    )
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: memory.title,
+        body: memory.body,
+        spotify_album_id: new_album.spotify_id
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+
+    memory.reload
+
+    assert_equal [ new_album ], memory.albums.to_a
+    assert_empty memory.songs
+
+    assert_equal 0, MemoryAlbum.where(
+      memory_id: memory.id,
+      album_id: old_album.id
+    ).count
+
+    assert_equal 1, MemoryAlbum.where(
+      memory_id: memory.id,
+      album_id: new_album.id
+    ).count
+
+    assert_equal "投稿を更新しました。", flash[:notice]
+  end
+
+
+  test "Spotify APIの取得に失敗した場合は投稿を更新しない" do
+    user = login_for_memory_test
+    old_song = create(:song)
+
+    memory = create(
+      :memory,
+      user: user,
+      songs: [ old_song ],
+      title: "編集前のタイトル",
+      body: "編集前の本文"
+    )
+
+    new_spotify_id = "spotify_api_failure_test"
+
+
+    spotify_client = Spotify::Client.singleton_class
+    original_new = Spotify::Client.method(:new)
+
+    spotify_client.define_method(:new) do |*_args|
+      raise Timeout::Error
+    end
+
+    begin
+      patch memory_path(memory), params: {
+        memory: {
+          title: "編集後のタイトル",
+          body: "編集後の本文",
+          spotify_track_id: new_spotify_id
+        }
+      }
+    ensure
+      spotify_client.define_method(:new, original_new)
+    end
+
+
+    assert_response :unprocessable_entity
+
+    assert_select "[role='alert'] li",
+                  text: "音楽情報を取得できませんでした。時間をおいて再度お試しください。"
+
+    memory.reload
+
+    assert_equal "編集前のタイトル", memory.title
+    assert_equal "編集前の本文", memory.body
+    assert_equal [ old_song ], memory.songs.to_a
+
+    assert_not Song.exists?(spotify_id: new_spotify_id)
+  end
+
+
   private
 
   def login_for_memory_test

@@ -1,0 +1,98 @@
+
+<main class="memories-page memory-compose-page">
+  <div class="memory-compose-container">
+    <header class="memory-compose-header">
+      <%= link_to "Music Memories",
+            root_path,
+            class: "memory-compose-logo" %>
+
+      <%= link_to "投稿詳細へ戻る",
+            memory_path(@memory),
+            class: "memory-compose-back" %>
+    </header>
+
+    <div class="memory-compose-intro">
+      <p class="memory-compose-eyebrow">EDIT A MEMORY</p>
+      <h1>音楽の思い出を編集する。</h1>
+      <p>投稿した感想や思い出を編集できます。</p>
+    </div>
+
+    <% if @memory.errors.any? %>
+      <div class="memory-compose-errors" role="alert">
+        <p>入力内容を確認してください。</p>
+
+        <ul>
+          <% @memory.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="memory-compose-grid">
+      <section class="memory-compose-panel">
+        <h2 class="memory-compose-heading">
+          <span>01</span> 音楽を選ぶ
+        </h2>
+
+        <p class="memory-compose-description">
+          現在の音楽を確認し、必要に応じて変更してください。
+        </p>
+
+        <div class="memory-compose-searches">
+          <%= link_to "楽曲を変更する",
+                songs_path(memory_id: @memory.id),
+                class: "memory-compose-search-button" %>
+
+          <%= link_to "アルバムを変更する",
+                albums_path(memory_id: @memory.id),
+                class: "memory-compose-search-button" %>
+        </div>
+
+        <p class="memory-compose-help">
+          音楽を変更しない場合は、そのまま文章を編集してください。
+        </p>
+
+        <p class="memory-compose-help">
+          検索画面へ移動すると、入力途中の文章は引き継がれません。
+          音楽を変更する場合は、先に選択してください。
+        </p>
+      </section>
+
+      <section class="memory-compose-panel">
+        <h2 class="memory-compose-heading">
+          <span>02</span> 言葉を編集する
+        </h2>
+
+        <% if @selected_music.present? %>
+          <div class="memory-compose-music">
+            <% if @selected_music.image_url.present? %>
+              <%= image_tag @selected_music.image_url,
+                    alt: "#{@selected_music.name}のジャケット",
+                    class: "memory-compose-artwork" %>
+            <% end %>
+
+            <div class="memory-compose-music-info">
+              <p class="memory-compose-eyebrow">
+                <%= @selected_music.is_a?(Song) ? "SELECTED TRACK" : "SELECTED ALBUM" %>
+              </p>
+
+              <h3><%= @selected_music.name %></h3>
+              <p><%= @selected_music.artist_name %></p>
+
+              <p class="memory-compose-music-meta">
+                <% if @selected_music.is_a?(Song) %>
+                  <%= @selected_music.album_name %>
+                <% else %>
+                  発売日：<%= @selected_music.release_date %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        <% end %>
+
+        <%= render "form", memory: @memory %>
+      </section>
+    </div>
+  </div>
+</main>

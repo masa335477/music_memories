@@ -4,6 +4,8 @@
     <p>好きな楽曲やアーティストを検索してみよう。</p>
 
     <%= form_with url: songs_path, method: :get, local: true, class: "search-filter-form" do |form| %>
+      <%= hidden_field_tag :memory_id, params[:memory_id] if params[:memory_id].present? %>
+
       <div class="search-filter-field">
         <%= form.label :q, "フリーワード" %>
         <%= form.search_field :q,
@@ -67,9 +69,18 @@
                 <p><%= track["artists"]&.map { |artist| artist["name"] }&.join(", ") %></p>
                 <p><%= track.dig("album", "name") %></p>
 
-                <%= link_to "この楽曲で投稿する",
-                      new_memory_path(spotify_track_id: track["id"]),
-                      class: "search_button" %>
+                <% if params[:memory_id].present? %>
+                  <%= link_to "この楽曲を選択する",
+                        edit_memory_path(
+                          params[:memory_id],
+                          spotify_track_id: track["id"]
+                        ),
+                        class: "search_button" %>
+                <% else %>
+                  <%= link_to "この楽曲で投稿する",
+                        new_memory_path(spotify_track_id: track["id"]),
+                        class: "search_button" %>
+                <% end %>
               </div>
             </div>
           <% end %>
@@ -84,7 +95,8 @@
                       artist: @artist,
                       album: @album,
                       year: @year,
-                      page: @page - 1
+                      page: @page - 1,
+                      memory_id: params[:memory_id]
                     ),
                     class: "pagination-button" %>
             <% end %>
@@ -100,7 +112,8 @@
                       artist: @artist,
                       album: @album,
                       year: @year,
-                      page: @page + 1
+                      page: @page + 1,
+                      memory_id: params[:memory_id]
                     ),
                     class: "pagination-button" %>
             <% end %>
