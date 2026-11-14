@@ -66,6 +66,10 @@
                 <h3><%= track["name"] %></h3>
                 <p><%= track["artists"]&.map { |artist| artist["name"] }&.join(", ") %></p>
                 <p><%= track.dig("album", "name") %></p>
+
+                <%= link_to "この楽曲で投稿する",
+                      new_memory_path(spotify_track_id: track["id"]),
+                      class: "search_button" %>
               </div>
             </div>
           <% end %>

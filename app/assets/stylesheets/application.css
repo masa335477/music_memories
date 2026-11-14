@@ -6,7 +6,7 @@
 .home-page {
   min-height: 100vh;
   background-color: #010302;
-  color: #ecf4ed;
+  color: #f0f5f1;
   font-family: sans-serif;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .home-logo-link:hover {
-  color: #c4d8c6;
+  color: #f0f5f1;
 }
 
 .home-header-button {
@@ -116,7 +116,7 @@
 }
 
 .home-feature-card h3 {
-  color: #ecf4ed;
+  color: #f0f5f1;
   font-size: 19px;
   margin-bottom: 16px;
 }
@@ -181,7 +181,7 @@
 .signup-page {
   min-height: 100vh;
   background-color: #010302;
-  color: #ecf4ed;
+  color: #f0f5f1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -197,13 +197,13 @@
 .signup-logo {
   text-align: center;
   font-size: 30px;
-  color: #ecf4ed;
+  color: #f0f5f1;
   margin-bottom: 8px;
 }
 
 .signup-message {
   text-align: center;
-  color: #ecf4ed;
+  color: #f0f5f1;
   margin-bottom: 30px;
 }
 
@@ -220,7 +220,7 @@
 
 .signup-description {
   text-align: center;
-  color: #ecf4ed;
+  color: #f0f5f1;
   font-size: 13px;
   margin-bottom: 28px;
 }
@@ -332,7 +332,7 @@
 .search-page {
   min-height: 100vh;
   background-color: #010302;
-  color: #ecf4ed;
+  color: #f0f5f1;
   padding: 48px 20px;
   box-sizing: border-box;
 }
@@ -575,7 +575,7 @@
 .memories-page {
   min-height: 100vh;
   background-color: #010302;
-  color: #ecf4ed;
+  color: #f0f5f1;
   padding: 48px 20px;
   box-sizing: border-box;
 }
@@ -628,7 +628,7 @@
 }
 
 .memory-card h2 a {
-  color: #ecf4ed;
+  color: #f0f5f1;
   text-decoration: none;
 }
 
@@ -650,7 +650,7 @@
 /* 投稿本文 */
 
 .memory-body {
-  color: #ecf4ed;
+  color: #f0f5f1;
   line-height: 1.9;
   overflow-wrap: anywhere;
   margin-bottom: 28px;
@@ -767,6 +767,33 @@
   background-color: #4c9864;
 }
 
+/* 楽曲・アルバム検索ボタンの配置 */
+.memory-search-buttons {
+  display: flex;       /* ボタンを横並びにする */
+  flex-wrap: wrap;     /* 画面幅が狭いときは折り返す */
+  gap: 12px;           /* ボタン同士の間隔 */
+  margin: 20px 0;      /* 上下の余白 */
+}
+
+/* 楽曲・アルバム検索へのリンクをボタン風に表示 */
+.memory-search-button {
+  display: inline-block;
+  padding: 10px 18px;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* マウスを重ねたとき・キーボードで選択したとき */
+.memory-search-button:hover,
+.memory-search-button:focus-visible {
+  background-color: #555;
+  border-color: #555;
+}
+
 /* 投稿が存在しない場合 */
 
 .memories-empty {
@@ -815,5 +842,394 @@
   .memories-button {
     padding: 10px 16px;
     font-size: 14px;
+  }
+}
+
+/* 未ログイン時の案内エリア */
+.login-notice {
+  display: flex;              /* メッセージとボタンを横並びにする */
+  align-items: center;        /* 上下の中央位置を揃える */
+  flex-wrap: wrap;            /* 幅が足りないときは折り返す */
+  gap: 12px;                 /* 要素同士の間隔 */
+  padding: 16px;             /* 枠の内側の余白 */
+  background-color: #fff8e1;  /* 背景を薄い黄色にする */
+  color: #5d4300;             /* 文字色を濃い茶色にする */
+  border: 1px solid #e5c66a;  /* 黄色の実線で囲む */
+  border-radius: 8px;         /* 枠の角を丸くする */
+}
+
+/* 案内文の余白を調整 */
+.login-notice p {
+  margin: 0;                 /* 段落の標準の外側余白をなくす */
+}
+
+/* ログインへのリンクをボタン風に表示 */
+.login-notice-button {
+  display: inline-block;     /* リンクに上下の余白などを設定できるようにする */
+  padding: 8px 16px;          /* 内側の余白：上下8px、左右16px */
+  background-color: #5d4300;  /* ボタンの背景色 */
+  color: #fff;               /* 文字色を白にする */
+  border-radius: 6px;         /* ボタンの角を丸くする */
+  text-decoration: none;     /* リンクの下線を消す */
+}
+
+/* マウスを重ねたときのボタン */
+.login-notice-button:hover {
+  background-color: #453200;  /* 背景を少し暗くする */
+}
+
+/* 投稿作成ページの背景・文字 */
+.memory-compose-page {
+  min-height: 100vh;
+  padding: 32px 20px 64px;
+  background: #0f1512;
+  color: #f0f5f1;
+}
+
+.memory-compose-page,
+.memory-compose-page * {
+  box-sizing: border-box;
+}
+
+.memory-compose-container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* ページ上部のロゴ・戻るリンク */
+.memory-compose-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #2c3930;
+}
+
+.memory-compose-page .memory-compose-logo {
+  color: #f0f5f1;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.memory-compose-page .memory-compose-back {
+  color: #b1bdae;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.memory-compose-page .memory-compose-back:hover {
+  color: #f0f5f1;
+  text-decoration: underline;
+}
+
+/* ページの見出し・説明 */
+.memory-compose-intro {
+  margin: 40px 0 28px;
+}
+
+.memory-compose-page .memory-compose-eyebrow {
+  margin: 0 0 10px;
+  color: #c5d6ae;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.memory-compose-intro h1 {
+  margin: 0 0 12px;
+  color: #edf1e9;
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1.5;
+}
+
+.memory-compose-intro > p:last-child {
+  margin: 0;
+  color: #b1bdae;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* 左に音楽選択、右に入力フォームを配置 */
+.memory-compose-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+  align-items: start;
+  gap: 24px;
+}
+
+/* 各エリアのカード */
+.memory-compose-panel {
+  min-width: 0;
+  padding: 28px;
+  background: #19221c;
+  border: 1px solid #2c3930;
+  border-radius: 12px;
+}
+
+.memory-compose-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 24px;
+  color: #edf1e9;
+  font-size: 18px;
+}
+
+.memory-compose-heading span {
+  color: #b8cd9b;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.memory-compose-description {
+  margin: 0 0 20px;
+  color: #c4cec0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* 音楽検索のボタン */
+.memory-compose-searches {
+  display: grid;
+  gap: 12px;
+}
+
+.memory-compose-page .memory-compose-search-button {
+  display: block;
+  padding: 14px 18px;
+  background: #253222;
+  color: #e0ebd5;
+  border: 1px solid #647952;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.memory-compose-search-button:hover {
+  background: #34452c;
+}
+
+.memory-compose-help {
+  margin: 18px 0 0;
+  color: #aab7a6;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.memory-compose-selection-status {
+  margin-top: 24px;
+  padding: 12px;
+  background: #253222;
+  color: #d0dfbc;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* 選択した楽曲・アルバムのカード */
+.memory-compose-music {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 16px;
+  background: #101712;
+  border: 1px solid #2c3930;
+  border-radius: 8px;
+}
+
+.memory-compose-artwork {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.memory-compose-music-info {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.memory-compose-music-info h3 {
+  margin: 0 0 8px;
+  color: #edf1e9;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.memory-compose-music-info > p {
+  margin: 0 0 6px;
+  color: #c4cec0;
+  font-size: 13px;
+}
+
+.memory-compose-music-info .memory-compose-music-meta {
+  color: #aab7a6;
+  font-size: 12px;
+}
+
+.memory-compose-empty {
+  margin-bottom: 28px;
+  padding: 24px 16px;
+  color: #b1bdae;
+  border: 1px dashed #647952;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* タイトル・本文の入力欄 */
+.memory-compose-field {
+  margin-bottom: 24px;
+}
+
+.memory-compose-field label {
+  display: block;
+  margin-bottom: 10px;
+  color: #e8ece5;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.memory-compose-required {
+  margin-left: 8px;
+  color: #bdcfa8;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.memory-compose-page .memory-compose-input {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  background: #0f1611;
+  color: #edf1e9;
+  border: 1px solid #45563f;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.memory-compose-input::placeholder {
+  color: #96a38f;
+  opacity: 1;
+}
+
+.memory-compose-input:focus {
+  outline: 2px solid #bfd39f;
+  outline-offset: 2px;
+}
+
+.memory-compose-textarea {
+  min-height: 240px;
+  resize: vertical;
+}
+
+/* Railsが入力エラー時に追加する要素 */
+.memory-compose-field .field_with_errors {
+  display: block;
+}
+
+.memory-compose-field .field_with_errors .memory-compose-input {
+  border-color: #df9990;
+}
+
+/* 投稿ボタンと公開の案内 */
+.memory-compose-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid #34422f;
+}
+
+.memory-compose-actions p {
+  margin: 0;
+  color: #b1bdae;
+  font-size: 12px;
+}
+
+.memory-compose-page .memory-compose-submit {
+  width: auto;
+  padding: 12px 24px;
+  background: #c5d8a8;
+  color: #172014;
+  border: 1px solid #c5d8a8;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.memory-compose-submit:hover {
+  background: #d6e5bf;
+}
+
+/* 入力エラーの案内 */
+.memory-compose-errors {
+  margin-bottom: 24px;
+  padding: 18px 22px;
+  background: #30201e;
+  color: #f4d4ce;
+  border: 1px solid #a86b62;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.memory-compose-errors p {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.memory-compose-errors ul {
+  margin: 0;
+  padding-left: 22px;
+}
+
+/* キーボード操作時の選択位置 */
+.memory-compose-page a:focus-visible,
+.memory-compose-submit:focus-visible {
+  outline: 2px solid #bfd39f;
+  outline-offset: 3px;
+}
+
+/* スマートフォンでは縦並びにする */
+@media (max-width: 760px) {
+  .memory-compose-page {
+    padding: 20px 16px 40px;
+  }
+
+  .memory-compose-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .memory-compose-panel {
+    padding: 20px;
+  }
+
+  .memory-compose-artwork {
+    width: 72px;
+    height: 72px;
+  }
+
+  .memory-compose-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .memory-compose-page .memory-compose-submit {
+    width: 100%;
   }
 }

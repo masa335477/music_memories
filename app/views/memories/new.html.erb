@@ -1,0 +1,153 @@
+<main class="memories-page memory-compose-page">
+  <div class="memory-compose-container">
+    <header class="memory-compose-header">
+      <%= link_to "Music Memories",
+            root_path,
+            class: "memory-compose-logo" %>
+
+      <%= link_to "投稿一覧へ戻る",
+            memories_path,
+            class: "memory-compose-back" %>
+    </header>
+
+    <div class="memory-compose-intro">
+      <p class="memory-compose-eyebrow">WRITE A MEMORY</p>
+      <h1>この音楽の、好きなところ。</h1>
+      <p>一曲でも、アルバムまるごとでも。今の気持ちを言葉にして残しましょう。</p>
+    </div>
+
+    <% if @memory.errors.any? %>
+      <div class="memory-compose-errors" role="alert">
+        <p>入力内容を確認してください。</p>
+
+        <ul>
+          <% @memory.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="memory-compose-grid">
+      <section class="memory-compose-panel">
+        <h2 class="memory-compose-heading">
+          <span>01</span> 音楽を選ぶ
+        </h2>
+
+        <p class="memory-compose-description">
+          投稿したい楽曲またはアルバムを検索してください。
+        </p>
+
+        <div class="memory-compose-searches">
+          <%= link_to "楽曲を検索する",
+                songs_path,
+                class: "memory-compose-search-button" %>
+
+          <%= link_to "アルバムを検索する",
+                albums_path,
+                class: "memory-compose-search-button" %>
+        </div>
+
+        <p class="memory-compose-help">
+          検索結果から「この楽曲で投稿する」または
+          「このアルバムで投稿する」を選択してください。
+        </p>
+
+        <% if @selected_music.present? %>
+          <div class="memory-compose-selection-status">
+            ✓ 音楽を選択しています
+          </div>
+        <% end %>
+
+        <p class="memory-compose-help">
+          音楽を選び直す場合は、本文を入力する前に検索してください。
+          検索画面へ移動すると、入力中の文章は引き継がれません。
+        </p>
+      </section>
+
+      <section class="memory-compose-panel">
+        <h2 class="memory-compose-heading">
+          <span>02</span> 言葉を添える
+        </h2>
+
+        <% if @selected_music.present? %>
+          <div class="memory-compose-music">
+            <% if @selected_music.image_url.present? %>
+              <%= image_tag @selected_music.image_url,
+                    alt: "#{@selected_music.name}のジャケット",
+                    class: "memory-compose-artwork" %>
+            <% end %>
+
+            <div class="memory-compose-music-info">
+              <p class="memory-compose-eyebrow">
+                <%= @selected_music.is_a?(Song) ? "SELECTED TRACK" : "SELECTED ALBUM" %>
+              </p>
+
+              <h3><%= @selected_music.name %></h3>
+              <p><%= @selected_music.artist_name %></p>
+
+              <p class="memory-compose-music-meta">
+                <% if @selected_music.is_a?(Song) %>
+                  <%= @selected_music.album_name %>
+                <% else %>
+                  発売日：<%= @selected_music.release_date %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        <% else %>
+          <div class="memory-compose-empty">
+            音楽がまだ選択されていません。<br>
+            楽曲またはアルバムを検索して選んでください。
+          </div>
+        <% end %>
+
+        <% if logged_in? %>
+          <%= form_with model: @memory,
+                local: true,
+                class: "memory-compose-form" do |form| %>
+            <%= form.hidden_field :spotify_track_id %>
+            <%= form.hidden_field :spotify_album_id %>
+
+            <div class="memory-compose-field">
+              <%= form.label :title do %>
+                タイトル
+                <span class="memory-compose-required">必須</span>
+              <% end %>
+
+              <%= form.text_field :title,
+                    placeholder: "例：何度でも聴きたくなる一枚",
+                    class: "memory-compose-input" %>
+            </div>
+
+            <div class="memory-compose-field">
+              <%= form.label :body do %>
+                感想・思い出
+                <span class="memory-compose-required">必須</span>
+              <% end %>
+
+              <%= form.text_area :body,
+                    rows: 10,
+                    placeholder: "この音楽の好きなところや、聴いたときの思い出を書いてみましょう。",
+                    class: "memory-compose-input memory-compose-textarea" %>
+            </div>
+
+            <div class="memory-compose-actions">
+              <p>投稿は公開されます。</p>
+              <%= form.submit "投稿する →",
+                    class: "memory-compose-submit" %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="login-notice">
+            <p>投稿するにはログインしてください。</p>
+
+            <%= link_to "ログインする",
+                  login_path,
+                  class: "login-notice-button" %>
+          </div>
+        <% end %>
+      </section>
+    </div>
+  </div>
+</main>
