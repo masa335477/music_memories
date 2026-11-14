@@ -71,6 +71,10 @@
                 </p>
 
                 <p>発売日：<%= album["release_date"] %></p>
+
+                <%= link_to "このアルバムで投稿する",
+                      new_memory_path(spotify_album_id: album["id"]),
+                      class: "search_button" %>
               </div>
             </div>
           <% end %>

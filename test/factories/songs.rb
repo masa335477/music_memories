@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :song do
-    spotify_id { "MyString" }
-    name { "MyString" }
-    artist_name { "MyString" }
-    album_name { "MyString" }
-    image_url { "MyString" }
-    spotify_url { "MyString" }
+    spotify_id { SecureRandom.alphanumeric(22) }
+    name { "テスト楽曲" }
+    artist_name { "テストアーティスト" }
+    album_name { "テストアルバム" }
+    image_url { nil }
+    spotify_url { "https://open.spotify.com/track/#{spotify_id}" }
   end
 end
