@@ -878,10 +878,95 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{login_path}']", text: /ログインはこちら/
   end
 
+  test "投稿詳細画面に共感数が表示される" do
+    memory = FactoryBot.create(:memory)
+    user = FactoryBot.create(:user)
+
+    Like.create!(user: user, memory: memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".memory-reactions", text: /共感：1件/
+  end
+
+  # 共感数が0件の場合の表示
+  test "共感が0件の場合は0件と表示される" do
+    memory = FactoryBot.create(:memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".memory-reactions", text: /共感：0件/
+  end
+
+  # 共感数が2件の場合の表示
+  test "共感が2件の場合は2件と表示される" do
+    memory = FactoryBot.create(:memory)
+    user1 = FactoryBot.create(:user)
+    user2 = FactoryBot.create(:user)
+
+    Like.create!(user: user1, memory: memory)
+    Like.create!(user: user2, memory: memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".memory-reactions", text: /共感：2件/
+  end
+
+  # ログイン中で、まだ共感していない場合
+  test "未共感のユーザーには共感ボタンが表示される" do
+    user = FactoryBot.create(:user)
+    memory = FactoryBot.create(:memory)
+
+    login_for_memory_test(user)
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select "form[action='#{memory_like_path(memory)}'][method='post']" do
+      assert_select "button", text: "共感", count: 1
+    end
+    assert_select "button", text: "共感を取り消す", count: 0
+  end
+
+  # ログイン中で、すでに共感している場合
+  test "共感済みのユーザーには解除ボタンが表示される" do
+    user = FactoryBot.create(:user)
+    memory = FactoryBot.create(:memory)
+
+    Like.create!(user: user, memory: memory)
+
+    login_for_memory_test(user)
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select "form[action='#{memory_like_path(memory)}']" do
+      assert_select "input[name='_method'][value='delete']", count: 1
+      assert_select "button", text: "共感を取り消す", count: 1
+    end
+    assert_select "button", text: "共感した", count: 0
+  end
+
+  # 未ログインの場合
+  test "未ログインユーザーにはログイン案内が表示される" do
+    memory = FactoryBot.create(:memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".memory-reactions-login" do
+      assert_select "p", text: /共感を押すにはログインが必要です/
+      assert_select "a[href='#{login_path}']", text: "ログイン", count: 1
+    end
+
+    assert_select ".memory-reactions button", count: 0
+  end
+
   private
 
-  def login_for_memory_test
-    user = User.create!(
+  def login_for_memory_test(user = nil)
+    user ||= User.create!(
       name: "投稿テストユーザー",
       email: "memory-#{SecureRandom.uuid}@example.com",
       password: "password123",
