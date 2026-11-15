@@ -1454,3 +1454,295 @@
 .memory-reactions-login p {
   margin: 0;           /* pタグに設定されている標準の余白をなくす */
 }
+
+/* ========================================
+   投稿一覧・詳細：投稿作成画面とデザインを統一
+======================================== */
+
+/* ページ全体 */
+.memory-browse-page {
+  padding: 32px 20px 64px;
+  background: #0f1512;
+  color: #f0f5f1;
+}
+
+.memory-browse-page,
+.memory-browse-page * {
+  box-sizing: border-box;
+}
+
+.memory-browse-page .memories-container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* ヘッダー */
+.memory-browse-page .memories-page-header {
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 0;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #2c3930;
+}
+
+.memory-browse-page .memory-browse-logo {
+  color: #f0f5f1;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.memory-browse-page .memory-browse-back {
+  color: #b1bdae;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.memory-browse-page .memory-browse-back:hover {
+  color: #f0f5f1;
+  text-decoration: underline;
+}
+
+/* ページの見出し */
+.memory-browse-intro {
+  margin: 40px 0 28px;
+}
+
+.memory-browse-eyebrow {
+  margin: 0 0 10px;
+  color: #c5d6ae;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.memory-browse-intro h1 {
+  margin: 0 0 12px;
+  color: #edf1e9;
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1.5;
+}
+
+.memory-browse-intro > p:last-child {
+  margin: 0;
+  color: #b1bdae;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* 投稿とコメント欄のカード */
+.memory-browse-page .memory-card,
+.memory-browse-page .comments-section {
+  min-width: 0;
+  padding: 28px;
+  background: #19221c;
+  border: 1px solid #2c3930;
+  border-radius: 12px;
+}
+
+.memory-browse-page .memory-card h2 {
+  color: #edf1e9;
+  font-size: 24px;
+  line-height: 1.5;
+}
+
+.memory-browse-page .memory-card h2 a {
+  color: #edf1e9;
+}
+
+.memory-browse-page .memory-card h2 a:hover {
+  color: #c5d6ae;
+}
+
+.memory-browse-page .memory-meta {
+  color: #b1bdae;
+  overflow-wrap: anywhere;
+}
+
+.memory-browse-page .memory-body {
+  color: #e8ece5;
+  line-height: 1.9;
+}
+
+/* 音楽情報とコメントの背景 */
+.memory-browse-page .memory-song,
+.memory-browse-page .memory-album,
+.memory-browse-page .comment-card {
+  background: #101712;
+  border-color: #2c3930;
+  border-radius: 8px;
+}
+
+.memory-browse-page .memory-music-card {
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+}
+
+.memory-browse-page .memory-music-image {
+  width: 96px;
+  height: 96px;
+  border-radius: 6px;
+}
+
+.memory-browse-page .memory-songs h3,
+.memory-browse-page .memory-albums h3 {
+  color: #c5d6ae;
+}
+
+.memory-browse-page .memory-song p,
+.memory-browse-page .memory-album p {
+  color: #c4cec0;
+}
+
+/* 詳細へのリンク */
+.memory-browse-page .memory-detail-link {
+  color: #c5d6ae;
+}
+
+/* リンク・送信ボタン */
+.memory-browse-page .memories-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 20px;
+  background: #c5d8a8;
+  color: #172014;
+  border: 1px solid #c5d8a8;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  cursor: pointer;
+}
+
+.memory-browse-page .memories-button:hover {
+  background: #d6e5bf;
+  color: #172014;
+}
+
+/* 共感エリア */
+.memory-browse-page .memory-reactions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #2c3930;
+}
+
+.memory-browse-page .memory-reactions > span {
+  color: #c4cec0;
+  font-size: 14px;
+}
+
+.memory-browse-page .memory-reactions-login p {
+  color: #b1bdae;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* コメント入力欄 */
+.memory-browse-page .comment-form-container {
+  border-top-color: #2c3930;
+}
+
+.memory-browse-page .comment-form-container textarea {
+  background: #0f1611;
+  color: #edf1e9;
+  border-color: #45563f;
+}
+
+.memory-browse-page .comment-form-container textarea:focus {
+  outline-color: #bfd39f;
+}
+
+.memory-browse-page .comment-form-container textarea::placeholder {
+  color: #96a38f;
+}
+
+/* コメント削除ボタン */
+.memory-browse-page .comment-card .memories-button {
+  background: transparent;
+  color: #e6a5a5;
+  border-color: #a86b6b;
+}
+
+.memory-browse-page .comment-card .memories-button:hover {
+  background: #3b2020;
+  color: #e6a5a5;
+}
+
+/* 下部の操作ボタン */
+.memory-browse-page .memory-navigation {
+  margin-top: 28px;
+  align-items: center;
+  gap: 12px;
+}
+
+.memory-browse-page .memory-navigation form,
+.memory-browse-page .memory-reactions form {
+  margin: 0;
+}
+
+/* 投稿がない場合 */
+.memory-browse-page .memories-empty {
+  padding: 32px 20px;
+  background: #19221c;
+  color: #b1bdae;
+  border: 1px dashed #647952;
+  border-radius: 12px;
+}
+
+/* キーボード操作時の選択位置 */
+.memory-browse-page a:focus-visible,
+.memory-browse-page button:focus-visible,
+.memory-browse-page input[type="submit"]:focus-visible {
+  outline: 2px solid #bfd39f;
+  outline-offset: 3px;
+}
+
+/* スマートフォン対応 */
+@media (max-width: 760px) {
+  .memory-browse-page {
+    padding: 20px 16px 40px;
+  }
+
+  .memory-browse-page .memory-card,
+  .memory-browse-page .comments-section {
+    padding: 20px;
+  }
+
+  .memory-browse-page .memory-card h2 {
+    font-size: 20px;
+  }
+
+  .memory-browse-page .memory-music-card {
+    gap: 12px;
+  }
+
+  .memory-browse-page .memory-music-image {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* 一覧・詳細のロゴをホーム画面にそろえる */
+.memory-browse-page .memory-browse-logo,
+.memory-browse-page .memory-browse-logo:visited {
+  color: #f0f5f1;
+  font-family: sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.memory-browse-page .memory-browse-logo:hover {
+  color: #f0f5f1;
+  text-decoration: none;
+}
