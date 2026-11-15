@@ -22,6 +22,30 @@
       </div>
 
       <%= render "memories/music_info", memory: @memory %>
+
+      <div class="memory-reactions">
+        <% if logged_in? %>
+          <% if current_user.likes.exists?(memory_id: @memory.id) %>
+            <%= button_to "共感を取り消す",
+                  memory_like_path(@memory),
+                  method: :delete,
+                  class: "memories-button" %>
+          <% else %>
+            <%= button_to "共感",
+                  memory_like_path(@memory),
+                  method: :post,
+                  class: "memories-button" %>
+          <% end %>
+        <% else %>
+          <div class="memory-reactions-login">
+            <p>共感を押すにはログインが必要です。</p>
+            <%= link_to "ログイン",
+                  login_path,
+                  class: "memories-button" %>
+          </div>
+        <% end %>
+        <span>共感：<%= @memory.likes.count %>件</span>
+      </div>
     </article>
 
     <section class="comments-section">
@@ -44,10 +68,12 @@
                 memory: @memory,
                 comment: @comment %>
         <% else %>
-          <p>コメントするにはログインが必要です。</p>
-          <%= link_to "ログインはこちら",
-            login_path,
-            class: "memories-button" %>
+          <div class="comment-login-notice">
+            <p>コメントするにはログインが必要です。</p>
+            <%= link_to "ログインはこちら",
+                  login_path,
+                  class: "memories-button" %>
+          </div>
         <% end %>
       </div>
     </section>

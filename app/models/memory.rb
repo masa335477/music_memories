@@ -8,6 +8,7 @@ class Memory < ApplicationRecord
   has_many :albums, through: :memory_albums
 
   has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
   attr_accessor :spotify_track_id, :spotify_album_id
 
