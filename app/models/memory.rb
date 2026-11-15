@@ -7,6 +7,8 @@ class Memory < ApplicationRecord
   has_many :memory_albums, dependent: :destroy
   has_many :albums, through: :memory_albums
 
+  has_many :comments, dependent: :destroy
+
   attr_accessor :spotify_track_id, :spotify_album_id
 
   validates :title, presence: { message: "を入力してください" }

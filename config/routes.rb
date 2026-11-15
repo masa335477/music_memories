@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :memories, only: [ :index, :new, :create, :show, :edit, :update, :destroy ]
+  resources :memories, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
+    resources :comments, only: [ :create ]
+  end
+
+  resources :comments, only: [ :destroy ]
   # 投稿一覧
   get "albums", to: "albums#index"
   get "songs", to: "songs#index"

@@ -1,0 +1,22 @@
+<article class="comment-card">
+  <div class="comment-meta">
+    <span><%= comment.user.name %></span>
+
+    <time datetime="<%= comment.created_at.iso8601 %>">
+      <%= comment.created_at.strftime("%Y/%m/%d %H:%M") %>
+    </time>
+  </div>
+
+  <div class="comment-body">
+    <%= simple_format(comment.body) %>
+  </div>
+
+  <% if logged_in? && comment.user_id == current_user.id %>
+    <%= button_to "削除する", comment_path(comment), method: :delete, form: {
+      data: {
+        turbo_confirm: "このコメントを削除しますか？"
+      }
+    },
+    class: "memories-button" %>
+  <% end %>
+</article>
