@@ -1,11 +1,18 @@
-<main class="memories-page">
+<main class="memories-page memory-browse-page">
   <div class="memories-container">
     <header class="memories-page-header">
-      <h1 class="home-logo">
-        <%= link_to "Music Memories", root_path, class: "home-logo-link" %>
-      </h1>
-      <span class="memories-page-title">投稿一覧</span>
+      <%= link_to "Music Memories", root_path, class: "memory-browse-logo" %>
+
+      <%= link_to "投稿する",
+            new_memory_path,
+            class: "memories-button" %>
     </header>
+
+    <div class="memory-browse-intro">
+      <p class="memory-browse-eyebrow">MUSIC MEMORIES</p>
+      <h1 class="memories-page-title">投稿一覧</h1>
+      <p>音楽にまつわる感想や思い出を見つけましょう。</p>
+    </div>
 
     <% if @memories.empty? %>
       <p class="memories-empty">まだ投稿がありません。</p>
