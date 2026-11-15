@@ -28,6 +28,8 @@ class MemoriesController < ApplicationController
 
   def show
     @memory = Memory.includes(:user, :songs, :albums).find(params[:id])
+    @comments = Comment.where(memory_id: @memory.id).includes(:user).order(created_at: :asc, id: :asc)
+    @comment = Comment.new
   end
 
   def edit

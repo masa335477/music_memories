@@ -860,6 +860,23 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_not Song.exists?(spotify_id: new_spotify_id)
   end
 
+  test "未ログインでも投稿に紐づくコメントを閲覧できる" do
+    user = FactoryBot.create(:user)
+    memory = FactoryBot.create(:memory)
+
+    Comment.create!(
+      user: user,
+      memory: memory,
+      body: "このアルバム、本当に大好きです！"
+    )
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".comments-section", text: /このアルバム、本当に大好きです！/
+    assert_select ".comment-form-container form", count: 0
+    assert_select "a[href='#{login_path}']", text: /ログインはこちら/
+  end
 
   private
 

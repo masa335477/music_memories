@@ -21,8 +21,36 @@
         <%= simple_format(@memory.body) %>
       </div>
 
-      <%= render "music_info", memory: @memory %>
+      <%= render "memories/music_info", memory: @memory %>
     </article>
+
+    <section class="comments-section">
+      <h2>コメント（<%= @comments.size %>件）</h2>
+
+      <% if @comments.any? %>
+        <div class="comments-list">
+          <%= render partial: "comments/comment",
+                collection: @comments,
+                as: :comment %>
+        </div>
+      <% else %>
+        <p>まだコメントはありません。</p>
+      <% end %>
+
+      <div class="comment-form-container">
+        <% if logged_in? %>
+          <h3>コメントを投稿する</h3>
+          <%= render "comments/form",
+                memory: @memory,
+                comment: @comment %>
+        <% else %>
+          <p>コメントするにはログインが必要です。</p>
+          <%= link_to "ログインはこちら",
+            login_path,
+            class: "memories-button" %>
+        <% end %>
+      </div>
+    </section>
 
     <nav class="memory-navigation" aria-label="ページ移動">
       <%= link_to "投稿一覧に戻る",

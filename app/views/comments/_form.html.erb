@@ -1,0 +1,24 @@
+<%= form_with model: [memory, comment] do |form| %>
+  <% if comment.errors.any? %>
+    <div class="form-errors" role="alert">
+      <p>コメントを投稿できませんでした。</p>
+
+      <ul>
+        <% comment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-field">
+    <%= form.label :body, "コメント" %>
+    <%= form.text_area :body,
+          rows: 4,
+          maxlength: 1000,
+          required: true,
+          placeholder: "音楽についての感想を書こう" %>
+  </div>
+
+  <%= form.submit "コメントする", class: "memories-button" %>
+<% end %>
