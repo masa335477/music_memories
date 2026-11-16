@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :memories, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     resources :comments, only: [ :create ]
     resource :like, only: [ :create, :destroy ], controller: :likes
+    resource :listening_interest, only: [ :create, :destroy ]
   end
 
   resources :comments, only: [ :destroy ]

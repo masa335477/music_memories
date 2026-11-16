@@ -948,19 +948,65 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_select "button", text: "共感した", count: 0
   end
 
+  test "投稿詳細に聴いてみたいの登録数が表示される" do
+    user = FactoryBot.create(:user)
+    memory = FactoryBot.create(:memory, user: user)
+
+    ListeningInterest.create!(user: user, memory: memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select ".memory-reactions", text: /聴いてみたい：1件/
+  end
+
   # 未ログインの場合
-  test "未ログインユーザーにはログイン案内が表示される" do
+  test "未ログインユーザーにはログイン案内と無効化されたリアクションボタンが表示される" do
     memory = FactoryBot.create(:memory)
 
     get memory_path(memory)
 
     assert_response :success
+
+    # ログイン案内とリンクが表示される
     assert_select ".memory-reactions-login" do
-      assert_select "p", text: /共感を押すにはログインが必要です/
+      assert_select "p", text: /リアクションするにはログインが必要です。/
       assert_select "a[href='#{login_path}']", text: "ログイン", count: 1
     end
 
-    assert_select ".memory-reactions button", count: 0
+    # 共感・聴いてみたいのボタンが無効化されている
+    assert_select ".memory-reactions button[disabled]", text: "共感", count: 1
+    assert_select ".memory-reactions button[disabled]", text: "聴いてみたい", count: 1
+
+    # 登録・解除用のフォームが存在しない
+    assert_select ".memory-reactions form[action=?]",
+                  memory_like_path(memory),
+                  count: 0
+
+    assert_select ".memory-reactions form[action=?]",
+                  memory_listening_interest_path(memory),
+                  count: 0
+  end
+
+  test "聴いてみたいの登録状態によってボタンが切り替わる" do
+    user = FactoryBot.create(:user)
+    memory = FactoryBot.create(:memory, user: user)
+
+    login_for_memory_test(user)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select "form[action=?] button", memory_listening_interest_path(memory),
+                  text: "聴いてみたい"
+
+    ListeningInterest.create!(user: user, memory: memory)
+
+    get memory_path(memory)
+
+    assert_response :success
+    assert_select "form[action=?] button", memory_listening_interest_path(memory),
+                  text: "聴いてみたいを解除"
   end
 
   private

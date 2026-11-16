@@ -70,4 +70,18 @@ class MemoryTest < ActiveSupport::TestCase
     assert_includes memory.errors[:base],
                     "楽曲またはアルバムを1件選択してください"
   end
+
+  test "投稿を削除すると共感と聴いてみたいも削除される" do
+    user = FactoryBot.create(:user)
+    memory = FactoryBot.create(:memory, user: user)
+
+    Like.create!(user: user, memory: memory)
+    ListeningInterest.create!(user: user, memory: memory)
+
+    assert_difference("Like.count", -1) do
+      assert_difference("ListeningInterest.count", -1) do
+        memory.destroy!
+      end
+    end
+  end
 end

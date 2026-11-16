@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_15_132918) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_16_141147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_132918) do
     t.index ["memory_id"], name: "index_likes_on_memory_id"
     t.index ["user_id", "memory_id"], name: "index_likes_on_user_id_and_memory_id", unique: true
     t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
+  create_table "listening_interests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "memory_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id"], name: "index_listening_interests_on_memory_id"
+    t.index ["user_id", "memory_id"], name: "index_listening_interests_on_user_id_and_memory_id", unique: true
+    t.index ["user_id"], name: "index_listening_interests_on_user_id"
   end
 
   create_table "memories", force: :cascade do |t|
@@ -101,6 +111,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_132918) do
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "memories"
   add_foreign_key "likes", "users"
+  add_foreign_key "listening_interests", "memories"
+  add_foreign_key "listening_interests", "users"
   add_foreign_key "memories", "users"
   add_foreign_key "memory_albums", "albums"
   add_foreign_key "memory_albums", "memories"
