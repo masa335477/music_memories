@@ -43,15 +43,36 @@
                   method: :post,
                   class: "memories-button" %>
           <% end %>
+
+          <% if current_user.listening_interests.exists?(memory_id: @memory.id) %>
+            <%= button_to "聴いてみたいを解除",
+                  memory_listening_interest_path(@memory),
+                  method: :delete,
+                  class: "memories-button" %>
+          <% else %>
+            <%= button_to "聴いてみたい",
+                  memory_listening_interest_path(@memory),
+                  method: :post,
+                  class: "memories-button" %>
+          <% end %>
         <% else %>
+          <button type="button" class="memories-button" disabled>
+            共感
+          </button>
+
+          <button type="button" class="memories-button" disabled>
+            聴いてみたい
+          </button>
+
           <div class="memory-reactions-login">
-            <p>共感を押すにはログインが必要です。</p>
+            <p>リアクションするにはログインが必要です。</p>
             <%= link_to "ログイン",
                   login_path,
                   class: "memories-button" %>
           </div>
         <% end %>
         <span>共感：<%= @memory.likes.count %>件</span>
+        <span>聴いてみたい：<%= @memory.listening_interests.count %>件</span>
       </div>
     </article>
 
