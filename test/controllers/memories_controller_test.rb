@@ -25,6 +25,23 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "投稿一覧にタグが表示される" do
+    memory = create(:memory)
+    tag1 = create(:tag, name: "ロック")
+    tag2 = create(:tag, name: "名盤")
+
+    memory.tags << [ tag1, tag2 ]
+
+    get memories_path
+
+    assert_response :success
+
+    assert_select "article.memory-card" do
+      assert_select ".memory-tags .memory-tag", text: "#ロック"
+      assert_select ".memory-tags .memory-tag", text: "#名盤"
+    end
+  end
+
   test "投稿が新しい順に表示される" do
     create(
       :memory,
@@ -129,6 +146,21 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
                     text: /#{Regexp.escape(memory.user.name)}/
       assert_select ".memory-body p", text: memory.body
     end
+  end
+
+  test "投稿詳細にタグが表示される" do
+    memory = create(:memory)
+    tag = create(:tag, name: "思い出の曲")
+
+    memory.tags << tag
+
+    get memory_path(memory)
+
+    assert_response :success
+
+    assert_select ".memory-tags .memory-tag",
+                  text: "#思い出の曲",
+                  count: 1
   end
 
   test "投稿詳細に紐付いた楽曲のジャケット画像を表示する" do
@@ -258,6 +290,120 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_empty memory.songs
   end
 
+  test "投稿作成時に複数のタグを登録できる" do
+    login_for_memory_test
+    song = create(:song)
+    tag1 = create(:tag, name: "ロック")
+    tag2 = create(:tag, name: "名盤")
+
+    assert_difference "Memory.count" => 1, "MemoryTag.count" => 2 do
+      post memories_path, params: {
+        memory: {
+          title: "タグ付きの投稿",
+          body: "何度でも聴きたくなる名盤です。",
+          spotify_track_id: song.spotify_id,
+          tag_ids: [ tag1.id, tag2.id ]
+        }
+      }
+    end
+
+    memory = Memory.order(:id).last
+
+    assert_redirected_to memory_path(memory)
+    assert_equal [ tag1.id, tag2.id ].sort, memory.tag_ids.sort
+  end
+
+  test "投稿作成時に新しいタグを作成できる" do
+    login_for_memory_test
+    song = create(:song)
+
+    assert_difference "Memory.count", 1 do
+      assert_difference "Tag.count", 1 do
+        post memories_path, params: {
+          memory: {
+            title: "新しいタグ付きの投稿",
+            body: "雨の日に聴きたくなる曲です。",
+            spotify_track_id: song.spotify_id,
+            new_tag_name: "雨の日に聴きたい曲"
+          }
+        }
+      end
+    end
+
+    memory = Memory.order(:id).last
+    tag = Tag.find_by(name: "雨の日に聴きたい曲")
+
+    assert_redirected_to memory_path(memory)
+    assert_not_nil tag
+    assert_includes memory.tags, tag
+  end
+
+  test "既存のタグ名を入力した場合はタグを再利用する" do
+    login_for_memory_test
+    song = create(:song)
+    existing_tag = create(:tag, name: "ロック")
+
+    assert_no_difference "Tag.count" do
+      assert_difference "Memory.count", 1 do
+        post memories_path, params: {
+          memory: {
+            title: "既存タグを利用する投稿",
+            body: "お気に入りのロックです。",
+            spotify_track_id: song.spotify_id,
+            new_tag_name: " ロック "
+          }
+        }
+      end
+    end
+
+    memory = Memory.order(:id).last
+
+    assert_redirected_to memory_path(memory)
+    assert_equal [ existing_tag.id ], memory.tag_ids
+  end
+
+  test "新しいタグ名が31文字以上の場合は投稿を保存しない" do
+    login_for_memory_test
+    song = create(:song)
+
+    assert_no_difference [ "Memory.count", "MemoryTag.count", "Tag.count" ] do
+      post memories_path, params: {
+        memory: {
+          title: "タグ名が長すぎる投稿",
+          body: "タグの文字数制限を確認します。",
+          spotify_track_id: song.spotify_id,
+          new_tag_name: "あ" * 31
+        }
+      }
+    end
+
+    assert_response :unprocessable_entity
+
+    assert_select "[role='alert'] li",
+                text: "新しいタグ名を確認してください（30文字以内）。"
+  end
+
+  test "タグを選択しなくても投稿できる" do
+    login_for_memory_test
+    song = create(:song)
+
+    assert_difference "Memory.count", 1 do
+      post memories_path, params: {
+        memory: {
+          title: "タグなしの投稿",
+          body: "タグを付けずに投稿します。",
+          spotify_track_id: song.spotify_id,
+          tag_ids: [ "" ]
+        }
+      }
+    end
+
+    memory = Memory.order(:id).last
+
+    assert_redirected_to memory_path(memory)
+    assert_empty memory.tags
+  end
+
   test "タイトルが空の場合は保存せず入力内容と楽曲を保持する" do
     login_for_memory_test
     song = create(:song)
@@ -359,6 +505,79 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "編集後の本文", memory.body
     assert_equal [ song ], memory.songs.to_a
     assert_equal "投稿を更新しました。", flash[:notice]
+  end
+
+  test "投稿編集時にタグを変更できる" do
+    user = login_for_memory_test
+    memory = create(:memory, user: user)
+
+    old_tag = create(:tag, name: "ロック")
+    new_tag = create(:tag, name: "おすすめ")
+
+    memory.tags << old_tag
+
+    patch memory_path(memory), params: {
+      memory: {
+        title: memory.title,
+        body: memory.body,
+        tag_ids: [ new_tag.id ]
+      }
+    }
+
+    assert_redirected_to memory_path(memory)
+    assert_equal [ new_tag.id ], memory.reload.tag_ids
+    assert_not_includes memory.tags, old_tag
+  end
+
+  test "投稿編集時に新しいタグを作成できる" do
+    user = login_for_memory_test
+    memory = create(:memory, user: user)
+    existing_tag = create(:tag, name: "ロック")
+
+    memory.tags << existing_tag
+
+    assert_difference "Tag.count", 1 do
+      patch memory_path(memory), params: {
+        memory: {
+          title: memory.title,
+          body: memory.body,
+          tag_ids: [ existing_tag.id ],
+          new_tag_name: "雨の日に聴きたい曲"
+        }
+      }
+    end
+
+    assert_redirected_to memory_path(memory)
+
+    memory.reload
+
+    assert_equal(
+      [ "ロック", "雨の日に聴きたい曲" ].sort,
+      memory.tags.pluck(:name).sort
+    )
+  end
+
+  test "投稿更新に失敗した場合は以前のタグが維持される" do
+    user = login_for_memory_test
+    memory = create(:memory, user: user)
+
+    old_tag = create(:tag, name: "ロック")
+    new_tag = create(:tag, name: "おすすめ")
+
+    memory.tags << old_tag
+
+    assert_no_difference "MemoryTag.count" do
+      patch memory_path(memory), params: {
+        memory: {
+          title: "",
+          body: memory.body,
+          tag_ids: [ new_tag.id ]
+        }
+      }
+    end
+
+    assert_response :unprocessable_entity
+    assert_equal [ old_tag.id ], memory.reload.tag_ids
   end
 
   test "投稿に紐付く楽曲を別の楽曲へ変更できる" do
@@ -1007,6 +1226,21 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "form[action=?] button", memory_listening_interest_path(memory),
                   text: "聴いてみたいを解除"
+  end
+
+  test "投稿詳細のタグがタグ別投稿一覧へのリンクになっている" do
+    memory = create(:memory)
+    tag = create(:tag, name: "ロック")
+    memory.tags << tag
+
+    get memory_path(memory)
+
+    assert_response :success
+
+    assert_select ".memory-tags a.memory-tag[href=?]",
+                  tag_path(tag),
+                  text: "#ロック",
+                  count: 1
   end
 
   private

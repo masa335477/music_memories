@@ -1,9 +1,10 @@
 class MemoriesController < ApplicationController
   before_action :require_login, only: [ :edit, :update, :destroy, :create ]
   before_action :set_owned_memory, only: [ :edit, :update, :destroy ]
+  before_action :set_tags, only: [ :new, :create, :update, :edit ]
 
   def index
-    @memories = Memory.includes(:user, :songs, :albums).order(created_at: :desc, id: :desc)
+    @memories = Memory.includes(:user, :songs, :albums, :tags).order(created_at: :desc, id: :desc)
   end
 
   def new
@@ -17,9 +18,22 @@ class MemoriesController < ApplicationController
   def create
     @memory = current_user.memories.build(memory_params)
 
-    music_loaded = attach_music
+    music_loaded = false
+    memory_saved = false
+    saved = false
 
-    if music_loaded && @memory.save
+    Memory.transaction do
+      music_loaded = attach_music
+      memory_saved = @memory.save if music_loaded
+
+      if music_loaded && memory_saved
+        saved = attach_new_tag
+      end
+
+      raise ActiveRecord::Rollback unless saved
+    end
+
+    if saved
       redirect_to memory_path(@memory), notice: "投稿を作成しました。"
     else
       render :new, status: :unprocessable_entity
@@ -27,7 +41,7 @@ class MemoriesController < ApplicationController
   end
 
   def show
-    @memory = Memory.includes(:user, :songs, :albums).find(params[:id])
+    @memory = Memory.includes(:user, :songs, :albums, :tags).find(params[:id])
     @comments = Comment.where(memory_id: @memory.id).includes(:user).order(created_at: :asc, id: :asc)
     @comment = Comment.new
   end
@@ -59,19 +73,21 @@ class MemoriesController < ApplicationController
   end
 
   def update
-    @memory.assign_attributes(memory_params)
-
     music_loaded = false
     saved = false
 
     Memory.transaction do
-      music_loaded = replace_music
-      saved = @memory.save if music_loaded
+      @memory.assign_attributes(memory_params)
 
-      raise ActiveRecord::Rollback unless music_loaded && saved
+      music_loaded = replace_music
+      if music_loaded && @memory.save
+        saved = attach_new_tag
+      end
+
+      raise ActiveRecord::Rollback unless saved
     end
 
-    if music_loaded && saved
+    if saved
       redirect_to memory_path(@memory), notice: "投稿を更新しました。"
     else
       @selected_music ||= @memory.songs.first || @memory.albums.first
@@ -99,6 +115,31 @@ class MemoriesController < ApplicationController
     redirect_to login_path, alert: "投稿するにはログインしてください。"
   end
 
+  def set_tags
+    @tags = Tag.order(:name)
+  end
+
+  def attach_new_tag
+    name = @memory.new_tag_name.to_s.strip
+
+    return true if name.blank?
+
+    tag = Tag.find_or_initialize_by(name: name)
+
+    unless tag.valid?
+      @memory.errors.add(
+        :base,
+        "新しいタグ名を確認してください（30文字以内）。"
+      )
+
+      return false
+    end
+
+    @memory.tags << tag unless @memory.tags.include?(tag)
+
+    true
+  end
+
   def set_owned_memory
     @memory = current_user.memories.find_by(id: params[:id])
     return if @memory
@@ -111,7 +152,9 @@ class MemoriesController < ApplicationController
       :title,
       :body,
       :spotify_track_id,
-      :spotify_album_id
+      :spotify_album_id,
+      :new_tag_name,
+      tag_ids: []
     )
   end
 

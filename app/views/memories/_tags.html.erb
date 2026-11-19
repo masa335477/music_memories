@@ -1,0 +1,9 @@
+<% if memory.tags.any? %>
+  <div class="memory-tags">
+    <% memory.tags.each do |tag| %>
+      <%= link_to "##{tag.name}",
+            tag_path(tag),
+            class: "memory-tag" %>
+    <% end %>
+  </div>
+<% end %>

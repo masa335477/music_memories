@@ -11,7 +11,10 @@ class Memory < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :listening_interests, dependent: :destroy
 
-  attr_accessor :spotify_track_id, :spotify_album_id
+  has_many :memory_tags, dependent: :destroy
+  has_many :tags, through: :memory_tags
+
+  attr_accessor :spotify_track_id, :spotify_album_id, :new_tag_name
 
   validates :title, presence: { message: "を入力してください" }
   validates :body, presence: { message: "を入力してください" }

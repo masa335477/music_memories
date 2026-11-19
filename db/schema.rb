@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_141147) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_111939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_141147) do
     t.index ["song_id"], name: "index_memory_songs_on_song_id"
   end
 
+  create_table "memory_tags", force: :cascade do |t|
+    t.bigint "memory_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id", "tag_id"], name: "index_memory_tags_on_memory_id_and_tag_id", unique: true
+    t.index ["memory_id"], name: "index_memory_tags_on_memory_id"
+    t.index ["tag_id"], name: "index_memory_tags_on_tag_id"
+  end
+
   create_table "songs", force: :cascade do |t|
     t.string "spotify_id", null: false
     t.string "name", null: false
@@ -96,6 +106,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_141147) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["spotify_id"], name: "index_songs_on_spotify_id", unique: true
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -118,4 +135,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_141147) do
   add_foreign_key "memory_albums", "memories"
   add_foreign_key "memory_songs", "memories"
   add_foreign_key "memory_songs", "songs"
+  add_foreign_key "memory_tags", "memories"
+  add_foreign_key "memory_tags", "tags"
 end
