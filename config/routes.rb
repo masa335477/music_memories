@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resource :listening_interest, only: [ :create, :destroy ]
   end
 
+  resources :tags, only: [ :show ]
+
   resources :comments, only: [ :destroy ]
   # 投稿一覧
   get "albums", to: "albums#index"

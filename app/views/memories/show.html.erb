@@ -29,6 +29,7 @@
       </div>
 
       <%= render "memories/music_info", memory: @memory %>
+      <%= render "memories/tags", memory: @memory %>
 
       <div class="memory-reactions">
         <% if logged_in? %>
