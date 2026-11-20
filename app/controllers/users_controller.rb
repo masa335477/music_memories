@@ -7,6 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      UserMailer.with(user: @user).registration_completed.deliver_later
       redirect_to root_path, notice: "ユーザー登録が完了しました。"
     else
       render :new, status: :unprocessable_entity
