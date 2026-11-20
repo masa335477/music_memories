@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+  # パスワード再設定
+  resource :password_reset, controller: "passwords", only: [ :new, :create, :edit, :update ]
   # 新規登録
   get "sign_up", to: "users#new"
   post "sign_up", to: "users#create"
