@@ -1,4 +1,4 @@
-FROM ruby:3.4.11
+FROM ruby:3.4.13
 WORKDIR /app
 
 # PostgreSQL接続に必要なライブラリ
