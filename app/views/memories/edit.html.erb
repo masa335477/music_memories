@@ -1,16 +1,11 @@
+<% content_for :header_actions do %>
+  <%= link_to "投稿詳細へ戻る",
+        memories_path,
+        class: "site-header__button site-header__button--secondary" %>
+<% end %>
 
 <main class="memories-page memory-compose-page">
   <div class="memory-compose-container">
-    <header class="memory-compose-header">
-      <%= link_to "Music Memories",
-            root_path,
-            class: "memory-compose-logo" %>
-
-      <%= link_to "投稿詳細へ戻る",
-            memory_path(@memory),
-            class: "memory-compose-back" %>
-    </header>
-
     <div class="memory-compose-intro">
       <p class="memory-compose-eyebrow">EDIT A MEMORY</p>
       <h1>音楽の思い出を編集する。</h1>
