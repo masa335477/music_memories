@@ -1,8 +1,5 @@
 <div class="signup-page">
   <div class="signup-container">
-    <h1 class="signup-logo">Music Memories</h1>
-    <p class="signup-message">好きな音楽に、あなたの言葉を。</p>
-
     <div class="signup-card">
       <h2>新規登録</h2>
       <p class="signup-description">アカウントを作成して、音楽の世界を広げよう</p>
@@ -39,6 +36,14 @@
           <%= form.label :password_confirmation, "確認用パスワード" %>
           <%= form.password_field :password_confirmation, placeholder: "パスワードを再入力" %>
         </div>
+
+        <p class="signup-legal">
+          登録前に
+          <%= link_to "利用規約", terms_path %>
+          と
+          <%= link_to "プライバシーポリシー", privacy_path %>
+          をご確認ください。
+        </p>
 
         <div class="signup-submit">
           <%= form.submit "アカウントを作成" %>

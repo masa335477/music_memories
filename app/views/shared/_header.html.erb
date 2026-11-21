@@ -1,0 +1,13 @@
+<header class="site-header">
+  <div class="site-header__container">
+    <%= link_to "Music Memories",
+          root_path,
+          class: "site-header__logo" %>
+
+    <% if content_for?(:header_actions) %>
+      <nav class="site-header__actions" aria-label="ページ操作">
+        <%= yield :header_actions %>
+      </nav>
+    <% end %>
+  </div>
+</header>

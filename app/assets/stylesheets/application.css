@@ -1,3 +1,14 @@
+/* Music Memories 共通カラーテーマ */
+:root {
+  --mm-background: #19221c;
+  --mm-surface: #1c2b22;
+  --mm-text: #edf1e9;
+  --mm-text-muted: #b1bdae;
+  --mm-border: #34422f;
+  --mm-accent: #c5d8a8;
+  --mm-accent-hover: #d6e5bf;
+  --mm-button-text: #172014;
+}
 
 /* ========================================
    トップページ
@@ -5,49 +16,20 @@
 
 .home-page {
   min-height: 100vh;
-  background-color: #010302;
-  color: #f0f5f1;
+  background-color: var(--mm-background);
+  color: var(--mm-text);
   font-family: sans-serif;
-}
-
-/* ヘッダー */
-
-.home-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 6%;
-  border-bottom: 1px solid #304235;
-}
-
-.home-logo {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
-
-/* ロゴのリンク */
-
-.home-logo-link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.home-logo-link:hover {
-  color: #f0f5f1;
 }
 
 .home-header-button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #a5bba7;
-  color: #010302;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
   border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
 }
-
-/* メインビジュアル */
 
 .home-hero {
   text-align: center;
@@ -75,8 +57,8 @@
 .home-primary-button {
   display: inline-block;
   padding: 15px 36px;
-  background-color: #a5bba7;
-  color: #010302;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
   border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
@@ -85,10 +67,8 @@
 
 .home-primary-button:hover,
 .home-header-button:hover {
-  background-color: #c4d8c6;
+  background-color: var(--mm-accent-hover);
 }
-
-/* 機能紹介 */
 
 .home-features {
   max-width: 1100px;
@@ -109,14 +89,14 @@
 }
 
 .home-feature-card {
-  background-color: #1c2b22;
+  background-color: var(--mm-surface);
   padding: 32px;
   border-radius: 16px;
-  border: 1px solid #304235;
+  border: 1px solid var(--mm-border);
 }
 
 .home-feature-card h3 {
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 19px;
   margin-bottom: 16px;
 }
@@ -127,27 +107,7 @@
   font-size: 14px;
 }
 
-/* フッター */
-
-.home-footer {
-  border-top: 1px solid #304235;
-  text-align: center;
-  padding: 24px;
-  color: #a5bba7;
-  font-size: 13px;
-}
-
-/* スマートフォン対応 */
-
 @media (max-width: 600px) {
-  .home-header {
-    padding: 16px 20px;
-  }
-
-  .home-logo {
-    font-size: 19px;
-  }
-
   .home-header-button {
     padding: 9px 14px;
     font-size: 13px;
@@ -180,8 +140,8 @@
 
 .signup-page {
   min-height: 100vh;
-  background-color: #010302;
-  color: #f0f5f1;
+  background-color: var(--mm-background);
+  color: var(--mm-text);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -197,18 +157,18 @@
 .signup-logo {
   text-align: center;
   font-size: 30px;
-  color: #f0f5f1;
+  color: var(--mm-text);
   margin-bottom: 8px;
 }
 
 .signup-message {
   text-align: center;
-  color: #f0f5f1;
+  color: var(--mm-text);
   margin-bottom: 30px;
 }
 
 .signup-card {
-  background-color: #1c2b22;
+  background-color: var(--mm-surface);
   padding: 32px;
   border-radius: 16px;
 }
@@ -220,7 +180,7 @@
 
 .signup-description {
   text-align: center;
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 13px;
   margin-bottom: 28px;
 }
@@ -253,8 +213,8 @@
 .signup-submit input {
   width: 100%;
   padding: 13px;
-  background-color: #a5bba7;
-  color: rgb(0, 0, 0);
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -264,7 +224,7 @@
 }
 
 .signup-submit input:hover {
-  background-color: #c4d8c6;
+  background-color: var(--mm-accent-hover);
 }
 
 @media (max-width: 480px) {
@@ -286,15 +246,11 @@
   text-align: center;
 }
 
-/* 成功メッセージ */
-
 .home-page .flash-message.notice {
   background-color: #1c3026;
   color: #ffffff;
   border: 1px solid #a8c0ac;
 }
-
-/* エラーメッセージ */
 
 .home-page .flash-message.alert {
   background-color: #3b2020;
@@ -302,37 +258,19 @@
   border: 1px solid #d9a0a0;
 }
 
-/* ヘッダー内のナビゲーション */
-
-.home-header-nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* ログインユーザー名 */
-
 .home-user-name {
   color: #ecf4ed;
   font-size: 16px;
-}
-
-/* ログアウトボタンのフォーム */
-
-.home-header-nav form {
-  margin: 0;
 }
 
 /* ========================================
    楽曲・アルバム検索 共通CSS
 ======================================== */
 
-/* ページ全体 */
-
 .search-page {
   min-height: 100vh;
-  background-color: #010302;
-  color: #f0f5f1;
+  background-color: var(--mm-background);
+  color: var(--mm-text);
   padding: 48px 20px;
   box-sizing: border-box;
 }
@@ -351,8 +289,6 @@
   color: #b5c4b8;
   margin-bottom: 28px;
 }
-
-/* 検索フォーム */
 
 .search-filter-form {
   display: flex;
@@ -379,36 +315,32 @@
   padding: 14px;
   border: 1px solid #48604d;
   border-radius: 8px;
-  background-color: #1c2b22;
+  background-color: var(--mm-surface);
   color: #ecf4ed;
   font-size: 16px;
   box-sizing: border-box;
 }
 
 .search-input:focus {
-  outline: 2px solid #81c99a;
+  outline: 2px solid var(--mm-accent);
   outline-offset: 2px;
 }
-
-/* 検索ボタン */
 
 .search-button {
   align-self: flex-start;
   padding: 14px 28px;
   border: none;
   border-radius: 8px;
-  background-color: #3e8054;
-  color: #ffffff;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .search-button:hover {
-  background-color: #4c9864;
+  background-color: var(--mm-accent-hover);
 }
-
-/* 詳細検索 */
 
 .search-advanced-search {
   width: 100%;
@@ -453,8 +385,6 @@
   margin-top: 20px;
 }
 
-/* 検索結果 */
-
 .search-results {
   display: grid;
   gap: 16px;
@@ -467,7 +397,7 @@
   gap: 20px;
   padding: 16px;
   border-radius: 12px;
-  background-color: #1c2b22;
+  background-color: var(--mm-surface);
 }
 
 .search-image {
@@ -494,8 +424,6 @@
   overflow-wrap: anywhere;
 }
 
-/* ページネーション */
-
 .search-pagination {
   display: flex;
   justify-content: center;
@@ -508,15 +436,15 @@
 .pagination-button {
   display: inline-block;
   padding: 10px 18px;
-  background-color: #3e8054;
-  color: #ffffff;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
   text-decoration: none;
   border-radius: 8px;
   font-weight: bold;
 }
 
 .pagination-button:hover {
-  background-color: #4c9864;
+  background-color: var(--mm-accent-hover);
 }
 
 .pagination-current {
@@ -570,12 +498,10 @@
    投稿一覧・投稿詳細 共通CSS
 ======================================== */
 
-/* ページ全体 */
-
 .memories-page {
   min-height: 100vh;
-  background-color: #010302;
-  color: #f0f5f1;
+  background-color: var(--mm-background);
+  color: var(--mm-text);
   padding: 48px 20px;
   box-sizing: border-box;
 }
@@ -584,8 +510,6 @@
   max-width: 900px;
   margin: 0 auto;
 }
-
-/* ヘッダー */
 
 .memories-page-header {
   display: flex;
@@ -599,15 +523,11 @@
   margin: 0;
 }
 
-/* ページタイトル */
-
 .memories-page-title {
   font-size: 20px;
   font-weight: bold;
   color: #ecf4ed;
 }
-
-/* 投稿一覧 */
 
 .memories-list {
   display: grid;
@@ -616,8 +536,8 @@
 
 .memory-card {
   padding: 28px;
-  background-color: #1c2b22;
-  border: 1px solid #304235;
+  background-color: var(--mm-surface);
+  border: 1px solid var(--mm-border);
   border-radius: 16px;
 }
 
@@ -628,15 +548,13 @@
 }
 
 .memory-card h2 a {
-  color: #f0f5f1;
+  color: var(--mm-text);
   text-decoration: none;
 }
 
 .memory-card h2 a:hover {
   color: #81c99a;
 }
-
-/* 投稿者・投稿日時 */
 
 .memory-meta {
   display: flex;
@@ -647,10 +565,9 @@
   margin-bottom: 24px;
 }
 
-/* 投稿本文 */
-
 .memory-body {
-  color: #f0f5f1;
+  color: var(--mm-text);
+  color: var(--mm-text);
   line-height: 1.9;
   overflow-wrap: anywhere;
   margin-bottom: 28px;
@@ -659,8 +576,6 @@
 .memory-body p {
   margin: 0 0 12px;
 }
-
-/* 楽曲・アルバム情報 */
 
 .memory-songs,
 .memory-albums {
@@ -680,7 +595,7 @@
   margin-bottom: 12px;
   background-color: #101a14;
   border-radius: 10px;
-  border: 1px solid #304235;
+  border: 1px solid var(--mm-border);
 }
 
 .memory-song p,
@@ -691,8 +606,6 @@
   margin: 6px 0;
   overflow-wrap: anywhere;
 }
-
-/* 楽曲・アルバムのジャケット表示 */
 
 .memory-music-card {
   display: flex;
@@ -724,8 +637,6 @@
   }
 }
 
-/* 詳細へのリンク */
-
 .memory-detail-link {
   display: inline-block;
   margin-top: 20px;
@@ -738,8 +649,6 @@
   text-decoration: underline;
 }
 
-/* 投稿詳細画面 */
-
 .memory-detail {
   margin-bottom: 24px;
 }
@@ -749,8 +658,6 @@
   gap: 16px;
   flex-wrap: wrap;
 }
-
-/* ボタン */
 
 .memories-button {
   display: inline-block;
@@ -767,15 +674,13 @@
   background-color: #4c9864;
 }
 
-/* 楽曲・アルバム検索ボタンの配置 */
 .memory-search-buttons {
-  display: flex;       /* ボタンを横並びにする */
-  flex-wrap: wrap;     /* 画面幅が狭いときは折り返す */
-  gap: 12px;           /* ボタン同士の間隔 */
-  margin: 20px 0;      /* 上下の余白 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
 }
 
-/* 楽曲・アルバム検索へのリンクをボタン風に表示 */
 .memory-search-button {
   display: inline-block;
   padding: 10px 18px;
@@ -787,19 +692,16 @@
   font-weight: bold;
 }
 
-/* マウスを重ねたとき・キーボードで選択したとき */
 .memory-search-button:hover,
 .memory-search-button:focus-visible {
   background-color: #555;
   border-color: #555;
 }
 
-/* 投稿が存在しない場合 */
-
 .memories-empty {
   padding: 32px;
   text-align: center;
-  background-color: #1c2b22;
+  background-color: var(--mm-surface);
   border-radius: 12px;
   color: #b5c4b8;
 }
@@ -835,7 +737,7 @@
   }
 
   .memory-song,
-  .memory-album {
+    .memory-album {
     padding: 14px;
   }
 
@@ -845,45 +747,40 @@
   }
 }
 
-/* 未ログイン時の案内エリア */
 .login-notice {
-  display: flex;              /* メッセージとボタンを横並びにする */
-  align-items: center;        /* 上下の中央位置を揃える */
-  flex-wrap: wrap;            /* 幅が足りないときは折り返す */
-  gap: 12px;                 /* 要素同士の間隔 */
-  padding: 16px;             /* 枠の内側の余白 */
-  background-color: #fff8e1;  /* 背景を薄い黄色にする */
-  color: #5d4300;             /* 文字色を濃い茶色にする */
-  border: 1px solid #e5c66a;  /* 黄色の実線で囲む */
-  border-radius: 8px;         /* 枠の角を丸くする */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  background-color: #fff8e1;
+  color: #5d4300;
+  border: 1px solid #e5c66a;
+  border-radius: 8px;
 }
 
-/* 案内文の余白を調整 */
 .login-notice p {
-  margin: 0;                 /* 段落の標準の外側余白をなくす */
+  margin: 0;
 }
 
-/* ログインへのリンクをボタン風に表示 */
 .login-notice-button {
-  display: inline-block;     /* リンクに上下の余白などを設定できるようにする */
-  padding: 8px 16px;          /* 内側の余白：上下8px、左右16px */
-  background-color: #5d4300;  /* ボタンの背景色 */
-  color: #fff;               /* 文字色を白にする */
-  border-radius: 6px;         /* ボタンの角を丸くする */
-  text-decoration: none;     /* リンクの下線を消す */
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #5d4300;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
 }
 
-/* マウスを重ねたときのボタン */
 .login-notice-button:hover {
-  background-color: #453200;  /* 背景を少し暗くする */
+  background-color: #453200;
 }
 
-/* 投稿作成ページの背景・文字 */
 .memory-compose-page {
   min-height: 100vh;
   padding: 32px 20px 64px;
-  background: #0f1512;
-  color: #f0f5f1;
+  background: var(--mm-background);
+  color: var(--mm-text);
 }
 
 .memory-compose-page,
@@ -897,7 +794,6 @@
   margin: 0 auto;
 }
 
-/* ページ上部のロゴ・戻るリンク */
 .memory-compose-header {
   display: flex;
   align-items: center;
@@ -905,35 +801,34 @@
   flex-wrap: wrap;
   gap: 16px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #2c3930;
+  border-bottom: 1px solid var(--mm-border);
 }
 
 .memory-compose-page .memory-compose-logo {
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 24px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .memory-compose-page .memory-compose-back {
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   font-size: 14px;
   text-decoration: none;
 }
 
 .memory-compose-page .memory-compose-back:hover {
-  color: #f0f5f1;
+  color: var(--mm-text);
   text-decoration: underline;
 }
 
-/* ページの見出し・説明 */
 .memory-compose-intro {
   margin: 40px 0 28px;
 }
 
 .memory-compose-page .memory-compose-eyebrow {
   margin: 0 0 10px;
-  color: #c5d6ae;
+  color: var(--mm-accent);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -941,19 +836,18 @@
 
 .memory-compose-intro h1 {
   margin: 0 0 12px;
-  color: #edf1e9;
+  color: var(--mm-text);
   font-size: clamp(24px, 4vw, 34px);
   line-height: 1.5;
 }
 
 .memory-compose-intro > p:last-child {
   margin: 0;
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   font-size: 14px;
   line-height: 1.8;
 }
 
-/* 左に音楽選択、右に入力フォームを配置 */
 .memory-compose-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
@@ -961,12 +855,11 @@
   gap: 24px;
 }
 
-/* 各エリアのカード */
 .memory-compose-panel {
   min-width: 0;
   padding: 28px;
-  background: #19221c;
-  border: 1px solid #2c3930;
+  background: var(--mm-background);
+  border: 1px solid var(--mm-border);
   border-radius: 12px;
 }
 
@@ -975,7 +868,7 @@
   align-items: center;
   gap: 10px;
   margin: 0 0 24px;
-  color: #edf1e9;
+  color: var(--mm-text);
   font-size: 18px;
 }
 
@@ -992,7 +885,6 @@
   line-height: 1.8;
 }
 
-/* 音楽検索のボタン */
 .memory-compose-searches {
   display: grid;
   gap: 12px;
@@ -1031,7 +923,6 @@
   font-size: 13px;
 }
 
-/* 選択した楽曲・アルバムのカード */
 .memory-compose-music {
   display: flex;
   align-items: center;
@@ -1039,7 +930,7 @@
   margin-bottom: 28px;
   padding: 16px;
   background: #101712;
-  border: 1px solid #2c3930;
+  border: 1px solid var(--mm-border);
   border-radius: 8px;
 }
 
@@ -1058,7 +949,7 @@
 
 .memory-compose-music-info h3 {
   margin: 0 0 8px;
-  color: #edf1e9;
+  color: var(--mm-text);
   font-size: 17px;
   line-height: 1.5;
 }
@@ -1077,14 +968,13 @@
 .memory-compose-empty {
   margin-bottom: 28px;
   padding: 24px 16px;
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   border: 1px dashed #647952;
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.8;
 }
 
-/* タイトル・本文の入力欄 */
 .memory-compose-field {
   margin-bottom: 24px;
 }
@@ -1109,7 +999,7 @@
   width: 100%;
   padding: 14px 16px;
   background: #0f1611;
-  color: #edf1e9;
+  color: var(--mm-text);
   border: 1px solid #45563f;
   border-radius: 8px;
   font: inherit;
@@ -1132,7 +1022,6 @@
   resize: vertical;
 }
 
-/* Railsが入力エラー時に追加する要素 */
 .memory-compose-field .field_with_errors {
   display: block;
 }
@@ -1141,7 +1030,6 @@
   border-color: #df9990;
 }
 
-/* 投稿ボタンと公開の案内 */
 .memory-compose-actions {
   display: flex;
   align-items: center;
@@ -1149,21 +1037,21 @@
   flex-wrap: wrap;
   gap: 16px;
   padding-top: 20px;
-  border-top: 1px solid #34422f;
+  border-top: 1px solid var(--mm-border);
 }
 
 .memory-compose-actions p {
   margin: 0;
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   font-size: 12px;
 }
 
 .memory-compose-page .memory-compose-submit {
   width: auto;
   padding: 12px 24px;
-  background: #c5d8a8;
-  color: #172014;
-  border: 1px solid #c5d8a8;
+  background: var(--mm-accent);
+  color: var(--mm-button-text);
+  border: 1px solid var(--mm-accent);
   border-radius: 7px;
   font: inherit;
   font-size: 14px;
@@ -1172,10 +1060,9 @@
 }
 
 .memory-compose-submit:hover {
-  background: #d6e5bf;
+  background: var(--mm-accent-hover);
 }
 
-/* 入力エラーの案内 */
 .memory-compose-errors {
   margin-bottom: 24px;
   padding: 18px 22px;
@@ -1197,14 +1084,12 @@
   padding-left: 22px;
 }
 
-/* キーボード操作時の選択位置 */
 .memory-compose-page a:focus-visible,
 .memory-compose-submit:focus-visible {
   outline: 2px solid #bfd39f;
   outline-offset: 3px;
 }
 
-/* スマートフォンでは縦並びにする */
 @media (max-width: 760px) {
   .memory-compose-page {
     padding: 20px 16px 40px;
@@ -1234,27 +1119,24 @@
   }
 }
 
-
 /* ========================================
    コメント機能
 ======================================== */
 
-/* コメント欄全体 */
 .comments-section {
   margin-top: 32px;
   padding: 28px;
-  background-color: #1c2b22;
-  border: 1px solid #304235;
+  background-color: var(--mm-surface);
+  border: 1px solid var(--mm-border);
   border-radius: 16px;
 }
 
 .comments-section > h2 {
   margin: 0 0 24px;
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 22px;
 }
 
-/* コメント一覧 */
 .comments-list {
   display: flex;
   flex-direction: column;
@@ -1262,15 +1144,13 @@
   margin-bottom: 28px;
 }
 
-/* 個別コメント */
 .comment-card {
   padding: 20px;
   background-color: #101a14;
-  border: 1px solid #304235;
+  border: 1px solid var(--mm-border);
   border-radius: 10px;
 }
 
-/* 投稿者と日時 */
 .comment-meta {
   display: flex;
   align-items: center;
@@ -1283,12 +1163,12 @@
 
 .comment-meta span {
   font-weight: bold;
-  color: #f0f5f1;
+  color: var(--mm-text);
 }
 
-/* コメント本文 */
 .comment-body {
-  color: #f0f5f1;
+  color: var(--mm-text);
+  color: var(--mm-text);
   font-size: 14px;
   line-height: 1.8;
   overflow-wrap: anywhere;
@@ -1302,7 +1182,6 @@
   margin-bottom: 0;
 }
 
-/* コメント削除ボタン */
 .comment-card form {
   margin-top: 16px;
 }
@@ -1320,20 +1199,18 @@
   background-color: #3b2020;
 }
 
-/* コメント入力エリア */
 .comment-form-container {
   margin-top: 28px;
   padding-top: 24px;
-  border-top: 1px solid #304235;
+  border-top: 1px solid var(--mm-border);
 }
 
 .comment-form-container h3 {
   margin: 0 0 20px;
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 18px;
 }
 
-/* コメント入力欄 */
 .comment-form-container .form-field {
   margin-bottom: 16px;
 }
@@ -1341,7 +1218,7 @@
 .comment-form-container .form-field label {
   display: block;
   margin-bottom: 10px;
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 14px;
   font-weight: bold;
 }
@@ -1352,7 +1229,7 @@
   min-height: 120px;
   padding: 14px;
   background-color: #101a14;
-  color: #f0f5f1;
+  color: var(--mm-text);
   border: 1px solid #48604d;
   border-radius: 8px;
   font: inherit;
@@ -1371,14 +1248,12 @@
   color: #a5bba7;
 }
 
-/* コメント送信ボタン */
 .comment-form-container input[type="submit"] {
   border: none;
   cursor: pointer;
   font-size: 14px;
 }
 
-/* コメント入力エラー */
 .comment-form-container .form-errors {
   margin-bottom: 20px;
   padding: 16px;
@@ -1399,7 +1274,6 @@
   padding-left: 20px;
 }
 
-/* 未ログイン時の案内 */
 .comment-login-notice {
   display: flex;
   align-items: center;
@@ -1413,7 +1287,6 @@
   font-size: 14px;
 }
 
-/* スマートフォン対応 */
 @media (max-width: 600px) {
   .comments-section {
     padding: 20px 16px;
@@ -1442,28 +1315,25 @@
    共感した機能
 ======================================== */
 
-/* 未ログイン時の案内エリア */
 .memory-reactions-login {
-  display: flex;       /* 説明文とログインボタンを横並びにする */
-  align-items: center; /* 説明文とボタンの上下の位置を中央に揃える */
-  gap: 12px;           /* 説明文とボタンの間隔を12px空ける */
-  flex-wrap: wrap;     /* 画面幅が狭い場合は折り返して表示する */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-/* 未ログイン時の案内文 */
 .memory-reactions-login p {
-  margin: 0;           /* pタグに設定されている標準の余白をなくす */
+  margin: 0;
 }
 
 /* ========================================
    投稿一覧・詳細：投稿作成画面とデザインを統一
 ======================================== */
 
-/* ページ全体 */
 .memory-browse-page {
   padding: 32px 20px 64px;
-  background: #0f1512;
-  color: #f0f5f1;
+  background: var(--mm-background);
+  color: var(--mm-text);
 }
 
 .memory-browse-page,
@@ -1477,41 +1347,39 @@
   margin: 0 auto;
 }
 
-/* ヘッダー */
 .memory-browse-page .memories-page-header {
   flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 0;
   padding-bottom: 24px;
-  border-bottom: 1px solid #2c3930;
+  border-bottom: 1px solid var(--mm-border);
 }
 
 .memory-browse-page .memory-browse-logo {
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-size: 24px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .memory-browse-page .memory-browse-back {
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   font-size: 14px;
   text-decoration: none;
 }
 
 .memory-browse-page .memory-browse-back:hover {
-  color: #f0f5f1;
+  color: var(--mm-text);
   text-decoration: underline;
 }
 
-/* ページの見出し */
 .memory-browse-intro {
   margin: 40px 0 28px;
 }
 
 .memory-browse-eyebrow {
   margin: 0 0 10px;
-  color: #c5d6ae;
+  color: var(--mm-accent);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1519,58 +1387,57 @@
 
 .memory-browse-intro h1 {
   margin: 0 0 12px;
-  color: #edf1e9;
+  color: var(--mm-text);
   font-size: clamp(24px, 4vw, 34px);
   line-height: 1.5;
 }
 
 .memory-browse-intro > p:last-child {
   margin: 0;
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   font-size: 14px;
   line-height: 1.8;
 }
 
-/* 投稿とコメント欄のカード */
 .memory-browse-page .memory-card,
 .memory-browse-page .comments-section {
   min-width: 0;
   padding: 28px;
-  background: #19221c;
-  border: 1px solid #2c3930;
+  background: var(--mm-background);
+  border: 1px solid var(--mm-border);
   border-radius: 12px;
 }
 
 .memory-browse-page .memory-card h2 {
-  color: #edf1e9;
+  color: var(--mm-text);
   font-size: 24px;
   line-height: 1.5;
 }
 
 .memory-browse-page .memory-card h2 a {
-  color: #edf1e9;
+  color: var(--mm-text);
 }
 
 .memory-browse-page .memory-card h2 a:hover {
-  color: #c5d6ae;
+  color: var(--mm-accent);
 }
 
 .memory-browse-page .memory-meta {
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   overflow-wrap: anywhere;
 }
 
 .memory-browse-page .memory-body {
+  color: var(--mm-text);
   color: #e8ece5;
   line-height: 1.9;
 }
 
-/* 音楽情報とコメントの背景 */
 .memory-browse-page .memory-song,
 .memory-browse-page .memory-album,
 .memory-browse-page .comment-card {
   background: #101712;
-  border-color: #2c3930;
+  border-color: var(--mm-border);
   border-radius: 8px;
 }
 
@@ -1588,7 +1455,7 @@
 
 .memory-browse-page .memory-songs h3,
 .memory-browse-page .memory-albums h3 {
-  color: #c5d6ae;
+  color: var(--mm-accent);
 }
 
 .memory-browse-page .memory-song p,
@@ -1596,21 +1463,19 @@
   color: #c4cec0;
 }
 
-/* 詳細へのリンク */
 .memory-browse-page .memory-detail-link {
-  color: #c5d6ae;
+  color: var(--mm-accent);
 }
 
-/* リンク・送信ボタン */
 .memory-browse-page .memories-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 44px;
   padding: 12px 20px;
-  background: #c5d8a8;
-  color: #172014;
-  border: 1px solid #c5d8a8;
+  background: var(--mm-accent);
+  color: var(--mm-button-text);
+  border: 1px solid var(--mm-accent);
   border-radius: 7px;
   font: inherit;
   font-size: 14px;
@@ -1621,11 +1486,10 @@
 }
 
 .memory-browse-page .memories-button:hover {
-  background: #d6e5bf;
-  color: #172014;
+  background: var(--mm-accent-hover);
+  color: var(--mm-button-text);
 }
 
-/* 共感エリア */
 .memory-browse-page .memory-reactions {
   display: flex;
   align-items: center;
@@ -1633,7 +1497,7 @@
   gap: 16px;
   margin-top: 28px;
   padding-top: 20px;
-  border-top: 1px solid #2c3930;
+  border-top: 1px solid var(--mm-border);
 }
 
 .memory-browse-page .memory-reactions > span {
@@ -1642,19 +1506,18 @@
 }
 
 .memory-browse-page .memory-reactions-login p {
-  color: #b1bdae;
+  color: var(--mm-text-muted);
   font-size: 14px;
   line-height: 1.8;
 }
 
-/* コメント入力欄 */
 .memory-browse-page .comment-form-container {
-  border-top-color: #2c3930;
+  border-top-color: var(--mm-border);
 }
 
 .memory-browse-page .comment-form-container textarea {
   background: #0f1611;
-  color: #edf1e9;
+  color: var(--mm-text);
   border-color: #45563f;
 }
 
@@ -1666,7 +1529,6 @@
   color: #96a38f;
 }
 
-/* コメント削除ボタン */
 .memory-browse-page .comment-card .memories-button {
   background: transparent;
   color: #e6a5a5;
@@ -1678,7 +1540,6 @@
   color: #e6a5a5;
 }
 
-/* 下部の操作ボタン */
 .memory-browse-page .memory-navigation {
   margin-top: 28px;
   align-items: center;
@@ -1690,16 +1551,14 @@
   margin: 0;
 }
 
-/* 投稿がない場合 */
 .memory-browse-page .memories-empty {
   padding: 32px 20px;
-  background: #19221c;
-  color: #b1bdae;
+  background: var(--mm-background);
+  color: var(--mm-text-muted);
   border: 1px dashed #647952;
   border-radius: 12px;
 }
 
-/* キーボード操作時の選択位置 */
 .memory-browse-page a:focus-visible,
 .memory-browse-page button:focus-visible,
 .memory-browse-page input[type="submit"]:focus-visible {
@@ -1707,14 +1566,13 @@
   outline-offset: 3px;
 }
 
-/* スマートフォン対応 */
 @media (max-width: 760px) {
   .memory-browse-page {
     padding: 20px 16px 40px;
   }
 
   .memory-browse-page .memory-card,
-  .memory-browse-page .comments-section {
+    .memory-browse-page .comments-section {
     padding: 20px;
   }
 
@@ -1732,10 +1590,9 @@
   }
 }
 
-/* 一覧・詳細のロゴをホーム画面にそろえる */
 .memory-browse-page .memory-browse-logo,
 .memory-browse-page .memory-browse-logo:visited {
-  color: #f0f5f1;
+  color: var(--mm-text);
   font-family: sans-serif;
   font-size: 24px;
   font-weight: 700;
@@ -1743,6 +1600,321 @@
 }
 
 .memory-browse-page .memory-browse-logo:hover {
-  color: #f0f5f1;
+  color: var(--mm-text);
   text-decoration: none;
+}
+
+.legal-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 56px 32px 72px;
+  background-color: var(--mm-background);
+  color: var(--mm-text);
+  font-size: 1rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.legal-page h1 {
+  margin: 0 0 32px;
+  color: var(--mm-text);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.legal-page section {
+  margin-top: 36px;
+}
+
+.legal-page h2 {
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--mm-border);
+  color: var(--mm-text);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.legal-page p {
+  margin: 0 0 16px;
+}
+
+.legal-page ol,
+.legal-page ul {
+  margin: 0 0 16px;
+  padding-left: 1.75em;
+  list-style-position: outside;
+}
+
+.legal-page ol {
+  list-style-type: decimal;
+}
+
+.legal-page ul {
+  list-style-type: disc;
+}
+
+.legal-page li {
+  margin-bottom: 12px;
+  padding-left: 0.25em;
+}
+
+.legal-page li:last-child {
+  margin-bottom: 0;
+}
+
+.legal-page a {
+  color: var(--mm-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.legal-page a:hover {
+  color: var(--mm-accent-hover);
+}
+
+.legal-page a:focus-visible {
+  outline: 2px solid var(--mm-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.legal-page .legal-page__sources {
+  margin-top: 48px;
+  padding: 24px;
+  border: 1px solid var(--mm-border);
+  border-radius: 12px;
+  background-color: var(--mm-surface);
+  color: var(--mm-text-muted);
+  font-size: 0.9rem;
+}
+
+.legal-page__sources li {
+  margin-bottom: 20px;
+}
+
+.legal-page__sources p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .legal-page {
+    padding: 32px 20px 48px;
+    font-size: 0.95rem;
+  }
+
+  .legal-page section {
+    margin-top: 28px;
+  }
+
+  .legal-page h2 {
+    font-size: 1.1rem;
+  }
+
+  .legal-page .legal-page__sources {
+    margin-top: 36px;
+    padding: 20px 16px;
+  }
+}
+
+.site-footer {
+  padding: 24px 16px;
+  border-top: 1px solid var(--mm-border);
+  color: var(--mm-text-muted);
+  background-color: var(--mm-background);
+  text-align: center;
+}
+
+.site-footer small {
+  font-size: 0.8rem;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 24px;
+  margin-top: 12px;
+}
+
+.site-footer__links a,
+.signup-legal a {
+  color: var(--mm-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.site-footer__links a:hover,
+.signup-legal a:hover {
+  color: var(--mm-accent-hover);
+}
+
+.signup-legal {
+  margin: 20px 0;
+  color: var(--mm-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+html {
+  min-height: 100%;
+  background: var(--mm-background);
+}
+
+body {
+  color: var(--mm-text);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--mm-background);
+}
+
+.site-header {
+  background-color: var(--mm-background);
+  border-bottom: 1px solid var(--mm-border);
+  color: var(--mm-text);
+  font-family: sans-serif;
+}
+
+.site-header__container {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.site-header .site-header__logo {
+  display: inline-block;
+  color: var(--mm-text);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.site-header .site-header__logo:visited,
+.site-header .site-header__logo:hover {
+  color: var(--mm-text);
+  text-decoration: none;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.site-header__actions form {
+  margin: 0;
+}
+
+.site-header__actions .home-user-name {
+  color: var(--mm-text);
+  font-size: 14px;
+}
+
+.site-header__actions .home-header-button {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.site-header__actions .home-header-button:hover {
+  background-color: var(--mm-accent-hover);
+}
+
+.site-header a:focus-visible,
+.site-header button:focus-visible {
+  outline: 2px solid var(--mm-accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .site-header__container {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .site-header .site-header__logo {
+    font-size: 22px;
+  }
+
+  .site-header__actions {
+    gap: 8px;
+  }
+
+  .site-header__actions .home-header-button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+.site-header__button {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border: 1px solid var(--mm-accent);
+  border-radius: 8px;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+}
+
+.site-header__button:visited {
+  color: var(--mm-button-text);
+}
+
+.site-header__button:hover {
+  background-color: var(--mm-accent-hover);
+  border-color: var(--mm-accent-hover);
+}
+
+.site-header__button--secondary,
+.site-header__button--secondary:visited {
+  background-color: transparent;
+  border-color: var(--mm-accent);
+  color: var(--mm-accent);
+}
+
+.site-header__button--secondary:hover {
+  background-color: var(--mm-surface);
+  border-color: var(--mm-accent-hover);
+  color: var(--mm-text);
+}
+
+@media (max-width: 600px) {
+  .site-header__button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
