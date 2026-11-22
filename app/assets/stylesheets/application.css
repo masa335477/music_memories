@@ -246,13 +246,13 @@
   text-align: center;
 }
 
-.home-page .flash-message.notice {
+.flash-message.notice {
   background-color: #1c3026;
   color: #ffffff;
   border: 1px solid #a8c0ac;
 }
 
-.home-page .flash-message.alert {
+.flash-message.alert {
   background-color: #3b2020;
   color: #ffffff;
   border: 1px solid #d9a0a0;
@@ -450,6 +450,36 @@
 .pagination-current {
   color: #ecf4ed;
   font-size: 14px;
+}
+
+/* 楽曲・アルバム選択ボタン */
+.music-select-button,
+.music-select-button:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+  padding: 12px 20px;
+  border: 1px solid var(--mm-accent);
+  border-radius: 8px;
+  background-color: var(--mm-accent);
+  color: var(--mm-button-text);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.music-select-button:hover {
+  background-color: var(--mm-accent-hover);
+  color: var(--mm-button-text);
+  transform: translateY(-2px);
+}
+
+.music-select-button:focus-visible {
+  outline: 2px solid var(--mm-accent);
+  outline-offset: 3px;
 }
 
 /* ========================================
@@ -1776,10 +1806,15 @@ body {
 }
 
 .site-header {
-  background-color: var(--mm-background);
+  background-color: #101713;
   border-bottom: 1px solid var(--mm-border);
   color: var(--mm-text);
   font-family: sans-serif;
+
+  /* スクロール時もヘッダーを画面上部に固定 */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .site-header__container {
@@ -1917,4 +1952,49 @@ body {
     padding: 8px 12px;
     font-size: 13px;
   }
+}
+
+/* ヘッダーのナビゲーションリンク */
+.site-header .home-header-nav-link,
+.site-header .home-header-nav-link:visited {
+  color: var(--mm-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.site-header .home-header-nav-link:hover {
+  color: #c6d7a9;
+}
+
+/* ログアウトボタン */
+.site-header__actions .home-header-logout {
+  appearance: none;
+  display: inline-block;
+  background-color: transparent;
+  color: var(--mm-text);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.site-header__actions .home-header-logout:hover {
+  background-color: var(--mm-surface);
+  color: var(--mm-text);
+}
+
+/* 投稿削除ボタン */
+.memory-browse-page .memory-delete-button {
+  background-color: #f4d4ce;
+  color: #3b2020;
+  border: 1px solid #a86b6b;
+}
+
+.memory-browse-page .memory-delete-button:hover {
+  background-color: #562b2b;
+  color: #ffffff;
 }

@@ -1,11 +1,11 @@
-<% content_for :header_actions do %>
-  <%= link_to "投稿一覧へ戻る",
-        memories_path,
-        class: "site-header__button" %>
-<% end %>
-
 <main class="memories-page memory-browse-page">
   <div class="memories-container">
+    <div class="memory-browse-back">
+      <%= link_to "← 投稿一覧へ戻る",
+            memories_path,
+            class: "site-header__button" %>
+    </div>
+
     <div class="memory-browse-intro">
       <p class="memory-browse-eyebrow">MUSIC MEMORY</p>
       <h1 class="memories-page-title">投稿詳細</h1>
@@ -106,7 +106,7 @@
     </section>
 
     <nav class="memory-navigation" aria-label="ページ移動">
-      <%= link_to "投稿一覧に戻る",
+      <%= link_to "← 投稿一覧に戻る",
             memories_path,
             class: "memories-button" %>
 
@@ -123,7 +123,7 @@
                   turbo_confirm: "この投稿を削除しますか？この操作は取り消せません。"
                 }
               },
-              class: "memories-button" %>
+              class: "memories-button memory-delete-button" %>
       <% end %>
     </nav>
   </div>

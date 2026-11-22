@@ -80,11 +80,11 @@
                           params[:memory_id],
                           spotify_album_id: album["id"]
                         ),
-                        class: "search_button" %>
+                        class: "music-select-button" %>
                 <% else %>
                   <%= link_to "このアルバムで投稿する",
                         new_memory_path(spotify_album_id: album["id"]),
-                        class: "search_button" %>
+                        class: "music-select-button" %>
                 <% end %>
               </div>
             </div>
