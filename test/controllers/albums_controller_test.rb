@@ -49,6 +49,16 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "検索結果が0件の場合は案内を表示する" do
+    with_fake_spotify_client do |calls|
+      get albums_path, params: { q: "存在しないアルバム" }
+
+      assert_response :success
+      assert_equal 1, calls.size
+      assert_select "p", text: "該当するアルバムが見つかりませんでした。"
+    end
+  end
+
   private
 
   def with_fake_spotify_client

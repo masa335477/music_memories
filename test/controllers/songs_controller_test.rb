@@ -1,4 +1,3 @@
-
 require "test_helper"
 
 class SongsControllerTest < ActionDispatch::IntegrationTest
@@ -47,6 +46,16 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 1, calls.size
       assert_equal 10, calls.first[:offset]
       assert_equal 10, calls.first[:limit]
+    end
+  end
+
+  test "検索結果が0件の場合は案内を表示する" do
+    with_fake_spotify_client do |calls|
+      get songs_path, params: { q: "存在しない楽曲" }
+
+      assert_response :success
+      assert_equal 1, calls.size
+      assert_select "p", text: "該当する楽曲が見つかりませんでした。"
     end
   end
 

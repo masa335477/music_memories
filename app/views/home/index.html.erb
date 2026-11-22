@@ -1,24 +1,4 @@
-<% content_for :header_actions do %>
-  <% if logged_in? %>
-    <span class="home-user-name">
-      <%= current_user.name %>さん
-    </span>
-
-    <%= button_to "ログアウト", logout_path,
-          method: :delete,
-          class: "home-header-button" %>
-  <% else %>
-    <%= link_to "ログイン", login_path,
-          class: "home-header-button" %>
-
-    <%= link_to "新規登録", sign_up_path,
-          class: "home-header-button" %>
-  <% end %>
-<% end %>
-
 <div class="home-page">
-  <%= render "shared/flash" %>
-
   <main>
     <% if logged_in? %>
       <section class="home-hero">
