@@ -51,3 +51,5 @@
 # ローカルのGem
 /vendor/bundle/
 
+# テストカバレッジの測定結果
+/coverage/
