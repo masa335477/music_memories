@@ -59,9 +59,51 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+
+  test "アルバム検索候補のJSONを返す" do
+    items = [
+      {
+        "id" => "spotify-album-id",
+        "name" => "ハチミツ",
+        "artists" => [ { "name" => "スピッツ" } ],
+        "images" => [
+          { "url" => "https://example.com/album.jpg" }
+        ]
+      }
+    ]
+
+    with_fake_spotify_client(items: items) do |calls|
+      get album_suggestions_url, params: { q: "ハチミツ" }
+
+      assert_response :success
+      assert_equal 1, calls.size
+      assert_equal "ハチミツ", calls.first[:query]
+      assert_equal 5, calls.first[:limit]
+
+      suggestion = response.parsed_body["suggestions"].first
+
+      assert_equal "spotify-album-id", suggestion["id"]
+      assert_equal "ハチミツ", suggestion["name"]
+      assert_equal "スピッツ", suggestion["artist"]
+      assert_equal "https://example.com/album.jpg", suggestion["image_url"]
+    end
+  end
+
+  test "アルバム検索候補のAPIエラー時は502を返す" do
+    with_fake_spotify_client(raise_error: true) do
+      get album_suggestions_url, params: { q: "ハチミツ" }
+
+      assert_response :bad_gateway
+      assert_equal [], response.parsed_body["suggestions"]
+      assert_equal "検索候補を取得できませんでした。",
+                   response.parsed_body["error"]
+    end
+  end
+
   private
 
-  def with_fake_spotify_client
+
+  def with_fake_spotify_client(items: [], raise_error: false)
     calls = []
 
     fake_client = Object.new
@@ -69,9 +111,11 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
     fake_client.define_singleton_method(:search_albums) do |query, **options|
       calls << { query: query, **options }
 
+      raise "Spotify API error" if raise_error
+
       {
-        "items" => [],
-        "total" => 0
+        "items" => items,
+        "total" => items.size
       }
     end
 

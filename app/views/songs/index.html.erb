@@ -6,12 +6,33 @@
     <%= form_with url: songs_path, method: :get, local: true, class: "search-filter-form" do |form| %>
       <%= hidden_field_tag :memory_id, params[:memory_id] if params[:memory_id].present? %>
 
-      <div class="search-filter-field">
-        <%= form.label :q, "フリーワード" %>
-        <%= form.search_field :q,
+      <div class="search-filter-field search-suggestions-field"
+           data-controller="search-suggestions"
+           data-action="click@document->search-suggestions#closeOnOutsideClick"
+           data-search-suggestions-url-value="<%= song_suggestions_path %>">
+
+        <%= form.text_field :q,
               value: @query,
               placeholder: "楽曲名・アーティスト名を入力",
-              class: "search-input" %>
+              class: "search-input",
+              autocomplete: "off",
+              data: {
+                search_suggestions_target: "input",
+                action: [
+                  "input->search-suggestions#search",
+                  "compositionstart->search-suggestions#compositionStart",
+                  "compositionend->search-suggestions#compositionEnd",
+                  "keydown->search-suggestions#handleKeydown",
+                  "keydown.esc->search-suggestions#closeOnEscape"
+                ].join(" ")
+              } %>
+
+
+        <div class="search-suggestions-results"
+             data-search-suggestions-target="results"
+             aria-label="楽曲の検索候補"
+             hidden>
+        </div>
       </div>
 
       <details class="search-advanced-search" <%= "open" if [@artist, @album, @year].any?(&:present?) %>>

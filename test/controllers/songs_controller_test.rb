@@ -59,9 +59,72 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+
+  test "2文字未満の検索候補ではSpotify APIを呼び出さない" do
+    get song_suggestions_url, params: { q: "サ" }
+
+    assert_response :success
+    assert_equal [], response.parsed_body["suggestions"]
+  end
+
+  test "空文字の検索候補では空配列を返す" do
+    get song_suggestions_url, params: { q: "" }
+
+    assert_response :success
+    assert_equal [], response.parsed_body["suggestions"]
+  end
+
+  test "101文字以上の検索候補では空配列を返す" do
+    get song_suggestions_url, params: { q: "あ" * 101 }
+
+    assert_response :success
+    assert_equal [], response.parsed_body["suggestions"]
+  end
+
+
+  test "楽曲検索候補のJSONを返す" do
+    items = [
+      {
+        "id" => "spotify-track-id",
+        "name" => "TSUNAMI",
+        "artists" => [ { "name" => "サザンオールスターズ" } ],
+        "album" => {
+          "images" => [ { "url" => "https://example.com/cover.jpg" } ]
+        }
+      }
+    ]
+
+    with_fake_spotify_client(items: items) do |calls|
+      get song_suggestions_url, params: { q: "サザン" }
+
+      assert_response :success
+      assert_equal 1, calls.size
+      assert_equal "サザン", calls.first[:query]
+      assert_equal 5, calls.first[:limit]
+
+      suggestion = response.parsed_body["suggestions"].first
+
+      assert_equal "spotify-track-id", suggestion["id"]
+      assert_equal "TSUNAMI", suggestion["name"]
+      assert_equal "サザンオールスターズ", suggestion["artist"]
+      assert_equal "https://example.com/cover.jpg", suggestion["image_url"]
+    end
+  end
+
+  test "Spotify APIエラー時は502を返す" do
+    with_fake_spotify_client(raise_error: true) do
+      get song_suggestions_url, params: { q: "サザン" }
+
+      assert_response :bad_gateway
+      assert_equal [], response.parsed_body["suggestions"]
+      assert_equal "検索候補を取得できませんでした。",
+                   response.parsed_body["error"]
+    end
+  end
+
   private
 
-  def with_fake_spotify_client
+  def with_fake_spotify_client(items: [], raise_error: false)
     calls = []
 
     fake_client = Object.new
@@ -69,9 +132,11 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
     fake_client.define_singleton_method(:search_tracks) do |query, **options|
       calls << { query: query, **options }
 
+      raise "Spotify API error" if raise_error
+
       {
-        "items" => [],
-        "total" => 0
+        "items" => items,
+        "total" => items.size
       }
     end
 

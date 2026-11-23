@@ -4,4 +4,8 @@ class AlbumsController < ApplicationController
   def index
     search_spotify(type: :album)
   end
+
+  def suggestions
+    spotify_suggestions(type: :album)
+  end
 end
