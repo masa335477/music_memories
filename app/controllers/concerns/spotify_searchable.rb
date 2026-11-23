@@ -1,4 +1,3 @@
-
 module SpotifySearchable
   extend ActiveSupport::Concern
 
@@ -6,6 +5,50 @@ module SpotifySearchable
   MAX_PAGES = 100
 
   private
+
+
+  def spotify_suggestions(type:)
+    query = params[:q].to_s.strip
+
+    if query.length < 2 || query.length > 100
+      return render json: { suggestions: [] }
+    end
+
+    client = Spotify::Client.new
+
+    result = case type
+    when :track
+      client.search_tracks(query, limit: 5)
+    when :album
+      client.search_albums(query, limit: 5)
+    else
+      raise ArgumentError, "未対応の検索タイプ: #{type}"
+    end
+
+    suggestions = result.fetch("items").map do |item|
+      image_url = if type == :track
+        item.dig("album", "images")&.first&.dig("url")
+      else
+        item["images"]&.first&.dig("url")
+      end
+
+      {
+        id: item["id"],
+        name: item["name"],
+        artist: item["artists"]&.map { |artist| artist["name"] }&.join(", "),
+        image_url: image_url
+      }
+    end
+
+    render json: { suggestions: suggestions }
+  rescue StandardError => e
+    Rails.logger.error("Spotify検索候補取得エラー: #{e.message}")
+
+    render json: {
+      suggestions: [],
+      error: "検索候補を取得できませんでした。"
+    }, status: :bad_gateway
+  end
 
   def search_spotify(type:)
     set_search_params

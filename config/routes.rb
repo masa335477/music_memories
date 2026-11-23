@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # 投稿一覧
   get "albums", to: "albums#index"
   get "songs", to: "songs#index"
+  get "albums/suggestions", to: "albums#suggestions", as: :album_suggestions
+  get "songs/suggestions", to: "songs#suggestions", as: :song_suggestions
   # ログイン/ログアウト
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"

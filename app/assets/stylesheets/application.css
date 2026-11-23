@@ -452,6 +452,85 @@
   font-size: 14px;
 }
 
+
+/* Spotify検索候補 */
+.search-suggestions-field {
+  position: relative;
+}
+
+.search-suggestions-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 320px;
+  overflow-y: auto;
+  margin-top: 4px;
+  padding: 6px;
+  background-color: var(--mm-surface);
+  border: 1px solid var(--mm-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.search-suggestions-results[hidden] {
+  display: none;
+}
+
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--mm-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-suggestion-item:hover,
+.search-suggestion-item:focus-visible {
+  background-color: #34452c;
+  outline: 2px solid var(--mm-accent);
+  outline-offset: -2px;
+}
+
+.search-suggestion-image {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.search-suggestion-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.search-suggestion-text strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.search-suggestion-text small {
+  color: var(--mm-text-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.search-suggestion-item--active {
+  background-color: #34452c;
+  outline: 2px solid var(--mm-accent);
+  outline-offset: -2px;
+}
+
 /* 楽曲・アルバム選択ボタン */
 .music-select-button,
 .music-select-button:visited {
