@@ -41,11 +41,6 @@ export default class extends Controller {
   }
 
   confirmSubmit(event) {
-    if (this.hasWork && !window.confirm(this.message)) {
-      event.preventDefault()
-      return
-    }
-
     this.submitting = true
   }
 
