@@ -21,26 +21,29 @@ class MemoriesController < ApplicationController
       params.permit(:spotify_track_id, :spotify_album_id)
     )
 
-    attach_music
+    if @memory.spotify_track_id.present? &&
+       @memory.spotify_album_id.present?
+      @memory.errors.add(
+        :base,
+        "楽曲とアルバムはどちらか一方を選択してください"
+      )
+    elsif @memory.spotify_track_id.present?
+      @selected_music = find_selected_music(
+        Song, @memory.spotify_track_id, :get_track
+      )
+    elsif @memory.spotify_album_id.present?
+      @selected_music = find_selected_music(
+        Album, @memory.spotify_album_id, :get_album
+      )
+    end
   end
 
   def create
     @memory = current_user.memories.build(memory_params)
 
-    music_loaded = false
-    memory_saved = false
-    saved = false
-
-    Memory.transaction do
-      music_loaded = attach_music
-      memory_saved = @memory.save if music_loaded
-
-      if music_loaded && memory_saved
-        saved = attach_new_tag
-      end
-
-      raise ActiveRecord::Rollback unless saved
-    end
+    service = Memories::SaveService.new(memory: @memory)
+    saved = service.create
+    @selected_music = service.selected_music
 
     if saved
       redirect_to memory_path(@memory), notice: "投稿を作成しました。"
@@ -82,19 +85,9 @@ class MemoriesController < ApplicationController
   end
 
   def update
-    music_loaded = false
-    saved = false
-
-    Memory.transaction do
-      @memory.assign_attributes(memory_params)
-
-      music_loaded = replace_music
-      if music_loaded && @memory.save
-        saved = attach_new_tag
-      end
-
-      raise ActiveRecord::Rollback unless saved
-    end
+    service = Memories::SaveService.new(memory: @memory)
+    saved = service.update(memory_params)
+    @selected_music = service.selected_music
 
     if saved
       redirect_to memory_path(@memory), notice: "投稿を更新しました。"
@@ -138,27 +131,6 @@ class MemoriesController < ApplicationController
     @tags = Tag.order(:name)
   end
 
-  def attach_new_tag
-    name = @memory.new_tag_name.to_s.strip
-
-    return true if name.blank?
-
-    tag = Tag.find_or_initialize_by(name: name)
-
-    unless tag.valid?
-      @memory.errors.add(
-        :base,
-        "新しいタグ名を確認してください（30文字以内）。"
-      )
-
-      return false
-    end
-
-    @memory.tags << tag unless @memory.tags.include?(tag)
-
-    true
-  end
-
   def set_owned_memory
     @memory = current_user.memories.find_by(id: params[:id])
     return if @memory
@@ -177,142 +149,10 @@ class MemoriesController < ApplicationController
     )
   end
 
-  def attach_music
-    if @memory.spotify_track_id.present? &&
-       @memory.spotify_album_id.present?
-      @memory.errors.add(:base, "楽曲とアルバムはどちらか一方を選択してください")
-      return false
-    end
-
-    if @memory.spotify_track_id.present?
-      attach_song
-    elsif @memory.spotify_album_id.present?
-      attach_album
-    else
-      true
-    end
-  end
-
-  def attach_song
-    song = Song.find_or_initialize_by(
-      spotify_id: @memory.spotify_track_id
+  def find_selected_music(model, spotify_id, _spotify_method)
+    Memories::MusicResolver.new(memory: @memory).resolve(
+      model: model,
+      spotify_id: spotify_id
     )
-
-    if song.new_record?
-      item = fetch_spotify_item(:get_track, song.spotify_id)
-      return false unless item
-
-      song.assign_attributes(
-        name: item.fetch("name"),
-        artist_name: item.fetch("artists").map { |artist| artist["name"] }.join(", "),
-        album_name: item.dig("album", "name"),
-        image_url: item.dig("album", "images")&.first&.dig("url"),
-        spotify_url: item.dig("external_urls", "spotify")
-      )
-    end
-
-    @memory.songs << song
-    @selected_music = song
-    true
-  end
-
-  def attach_album
-    album = Album.find_or_initialize_by(
-      spotify_id: @memory.spotify_album_id
-    )
-
-    if album.new_record?
-      item = fetch_spotify_item(:get_album, album.spotify_id)
-      return false unless item
-
-      album.assign_attributes(
-        name: item.fetch("name"),
-        artist_name: item.fetch("artists").map { |artist| artist["name"] }.join(", "),
-        release_date: item["release_date"],
-        image_url: item["images"]&.first&.dig("url"),
-        spotify_url: item.dig("external_urls", "spotify")
-      )
-    end
-
-    @memory.albums << album
-    @selected_music = album
-    true
-  end
-
-  def fetch_spotify_item(method, spotify_id)
-    Spotify::Client.new.public_send(method, spotify_id)
-  rescue RuntimeError, ArgumentError, KeyError, JSON::ParserError,
-         Timeout::Error, SocketError, EOFError,
-         SystemCallError, OpenSSL::SSL::SSLError
-    @memory.errors.add(
-      :base,
-      "音楽情報を取得できませんでした。時間をおいて再度お試しください。"
-    )
-    nil
-  end
-
-
-  def find_selected_music(model, spotify_id, spotify_method)
-    music = model.find_by(spotify_id: spotify_id)
-    return music if music
-
-    item = fetch_spotify_item(spotify_method, spotify_id)
-    return nil unless item
-
-    if model == Song
-      Song.new(
-        spotify_id: spotify_id,
-        name: item.fetch("name"),
-        artist_name: item.fetch("artists").map { |artist| artist["name"] }.join(", "),
-        album_name: item.dig("album", "name"),
-        image_url: item.dig("album", "images")&.first&.dig("url"),
-        spotify_url: item.dig("external_urls", "spotify")
-      )
-    else
-      Album.new(
-        spotify_id: spotify_id,
-        name: item.fetch("name"),
-        artist_name: item.fetch("artists").map { |artist| artist["name"] }.join(", "),
-        release_date: item["release_date"],
-        image_url: item["images"]&.first&.dig("url"),
-        spotify_url: item.dig("external_urls", "spotify")
-      )
-    end
-  end
-
-
-  def replace_music
-    if @memory.spotify_track_id.present? &&
-       @memory.spotify_album_id.present?
-      @memory.errors.add(:base, "楽曲とアルバムはどちらか一方を選択してください")
-      return false
-    end
-
-    if @memory.spotify_track_id.present?
-      @selected_music = find_selected_music(
-        Song, @memory.spotify_track_id, :get_track
-      )
-    elsif @memory.spotify_album_id.present?
-      @selected_music = find_selected_music(
-        Album, @memory.spotify_album_id, :get_album
-      )
-    else
-      @selected_music = @memory.songs.first || @memory.albums.first
-    end
-
-    unless @selected_music
-      @memory.errors.add(:base, "楽曲またはアルバムを選択してください") if @memory.errors.empty?
-      return false
-    end
-
-    if @selected_music.is_a?(Song)
-      @memory.albums = []
-      @memory.songs = [ @selected_music ]
-    else
-      @memory.songs = []
-      @memory.albums = [ @selected_music ]
-    end
-
-    true
   end
 end
