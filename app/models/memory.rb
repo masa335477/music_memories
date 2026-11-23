@@ -21,6 +21,24 @@ class Memory < ApplicationRecord
 
   validate :must_have_one_music
 
+  def self.search(query)
+    return all if query.blank?
+
+    if query.start_with?("#", "＃")
+      tag_name = query[1..].strip
+      return none if tag_name.blank?
+
+      return joins(:tags).where("tags.name ILIKE ?", "%#{sanitize_sql_like(tag_name)}%").distinct
+    end
+
+    left_joins(:songs, :albums, :tags).where(<<~SQL, query: "%#{sanitize_sql_like(query)}%").distinct
+      memories.title ILIKE :query OR memories.body ILIKE :query
+        OR songs.name ILIKE :query OR songs.artist_name ILIKE :query OR songs.album_name ILIKE :query
+        OR albums.name ILIKE :query OR albums.artist_name ILIKE :query
+        OR tags.name ILIKE :query
+    SQL
+  end
+
   private
 
   def must_have_one_music
