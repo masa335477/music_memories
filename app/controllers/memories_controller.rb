@@ -1,10 +1,19 @@
 class MemoriesController < ApplicationController
   before_action :require_login, only: [ :edit, :update, :destroy, :create ]
   before_action :set_owned_memory, only: [ :edit, :update, :destroy ]
+  before_action :set_saved_memory_fields, only: [ :edit, :update ]
   before_action :set_tags, only: [ :new, :create, :update, :edit ]
 
   def index
-    @memories = Memory.includes(:user, :songs, :albums, :tags).order(created_at: :desc, id: :desc)
+    filters = params.permit(:q, :tag_id)
+    @query = filters[:q].to_s.strip
+    @selected_tag_id = filters[:tag_id].presence
+    @tags = Tag.order(:name)
+    @memories = Memory.search(@query).preload(:user, :songs, :albums, :tags).order(created_at: :desc, id: :desc)
+    if @selected_tag_id.present?
+      @memories = @memories.where(id: MemoryTag.where(tag_id: @selected_tag_id).select(:memory_id))
+    end
+    @search_active = @query.present? || @selected_tag_id.present?
   end
 
   def new
@@ -108,6 +117,16 @@ class MemoriesController < ApplicationController
   end
 
   private
+
+  def set_saved_memory_fields
+    @saved_memory_fields = {
+      title: @memory.title.to_s,
+      body: @memory.body.to_s,
+      spotify_track_id: @memory.songs.first&.spotify_id.to_s,
+      spotify_album_id: @memory.albums.first&.spotify_id.to_s,
+      tag_ids: @memory.tag_ids.map(&:to_s).sort
+    }
+  end
 
   def require_login
     return if logged_in?

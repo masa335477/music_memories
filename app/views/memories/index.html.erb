@@ -6,8 +6,27 @@
       <p>音楽にまつわる感想や思い出を見つけましょう。</p>
     </div>
 
+    <%= form_with url: memories_path, method: :get, local: true, class: "search-filter-form", role: "search" do |form| %>
+      <div class="search-filter-field">
+        <%= form.label :q, "投稿を検索" %>
+        <%= form.search_field :q, value: @query, class: "search-input", aria: { describedby: "memory-search-help" } %>
+        <small id="memory-search-help">タイトル・本文、楽曲名・アルバム名・アーティスト名、タグで検索できます。タグだけを探すときは「#ロック」のように入力してください。</small>
+      </div>
+      <% if @tags.any? %>
+        <div class="search-filter-field">
+          <%= form.label :tag_id, "タグで絞り込む" %>
+          <%= form.collection_select :tag_id, @tags, :id, :name,
+                { include_blank: "すべてのタグ", selected: @selected_tag_id }, { class: "search-input" } %>
+        </div>
+      <% end %>
+      <div class="memory-search-actions">
+        <%= form.submit "検索", name: nil, class: "memories-button" %>
+        <%= link_to "検索をクリア", memories_path if @search_active %>
+      </div>
+    <% end %>
+
     <% if @memories.empty? %>
-      <p class="memories-empty">まだ投稿がありません。</p>
+      <p class="memories-empty"><%= @search_active ? "検索条件に一致する投稿がありません。" : "まだ投稿がありません。" %></p>
     <% else %>
       <div class="memories-list">
         <% @memories.each do |memory| %>

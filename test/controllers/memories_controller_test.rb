@@ -42,6 +42,130 @@ class MemoriesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "投稿のタイトルと本文を部分一致で検索し新しい順に表示する" do
+    older = create(:memory, title: "初めてのライブ", created_at: 2.days.ago)
+    newer = create(:memory, body: "ライブの帰り道に聴いた曲。", created_at: 1.day.ago)
+    create(:memory, title: "検索対象外の投稿")
+
+    get memories_path, params: { q: " ライブ " }
+
+    assert_response :success
+    assert_equal [ newer.title, older.title ], css_select("article.memory-card h2").map(&:text)
+    assert_select "form[action=?][method=get] input[name=q][value=?]", memories_path, "ライブ"
+    assert_select "a[href=?]", memories_path, text: "検索をクリア"
+  end
+
+  test "楽曲とアルバムの名前やアーティスト名で投稿を検索できる" do
+    song = create(:song, name: "Time Is Running Out", artist_name: "Muse", album_name: "Absolution")
+    album = create(:album, name: "Ghost Reveries", artist_name: "Opeth")
+    song_memory = create(:memory, songs: [ song ])
+    album_memory = create(:memory, songs: [], albums: [ album ])
+    create(:memory)
+
+    { "running out" => song_memory, "MUSE" => song_memory, "absolution" => song_memory,
+      "reveries" => album_memory, "OPETH" => album_memory }.each do |query, memory|
+      get memories_path, params: { q: query }
+
+      assert_response :success
+      assert_equal [ memory_path(memory) ], css_select("article.memory-card h2 a").map { |link| link["href"] }
+    end
+  end
+
+  test "タグ名を検索でき先頭にハッシュを付けるとタグだけを検索する" do
+    tagged = create(:memory, title: "お気に入りの投稿")
+    tagged.tags << [ create(:tag, name: "ロック"), create(:tag, name: "プログレッシブロック"), create(:tag, name: "名盤") ]
+    untagged = create(:memory, title: "ロックについて")
+
+    get memories_path, params: { q: "ロック" }
+
+    assert_response :success
+    assert_equal [ untagged.title, tagged.title ], css_select("article.memory-card h2").map(&:text)
+
+    [ "#ロック", "＃ロック" ].each do |query|
+      get memories_path, params: { q: query }
+
+      assert_response :success
+      assert_select "article.memory-card", count: 1 do
+        assert_select "h2 a[href=?]", memory_path(tagged)
+        assert_select ".memory-tags .memory-tag", text: "#名盤"
+      end
+    end
+  end
+
+  test "検索でパーセントとアンダースコアを文字として扱う" do
+    memory = create(:memory, title: "100%_Live")
+    create(:memory, title: "1000xLive")
+
+    get memories_path, params: { q: "%_live" }
+
+    assert_response :success
+    assert_equal [ memory.title ], css_select("article.memory-card h2").map(&:text)
+  end
+
+  test "既存タグを選んで投稿を絞り込み選択と投稿の全タグを表示する" do
+    rock = create(:tag, name: "ロック")
+    prog = create(:tag, name: "プログレッシブロック")
+    tagged = create(:memory, tags: [ rock, create(:tag, name: "名盤") ])
+    create(:memory, tags: [ prog ])
+    create(:memory)
+
+    get memories_path, params: { tag_id: rock.id }
+
+    assert_response :success
+    assert_select "select[name=tag_id]" do
+      assert_select "option[value='']", text: "すべてのタグ"
+      assert_select "option[value=?][selected]", rock.id.to_s, text: "ロック"
+      assert_select "option[value=?]", prog.id.to_s, text: "プログレッシブロック"
+    end
+    assert_equal [ memory_path(tagged) ], css_select("article.memory-card h2 a").map { |link| link["href"] }
+    assert_select ".memory-tags .memory-tag", text: "#名盤"
+    assert_select "a[href=?]", memories_path, text: "検索をクリア"
+  end
+
+  test "選んだタグとキーワードの両方で投稿を絞り込める" do
+    rock = create(:tag, name: "ロック")
+    matching = create(:memory, title: "ライブの思い出", tags: [ rock ])
+    create(:memory, title: "アルバムの感想", tags: [ rock ])
+    create(:memory, title: "ライブの感想")
+
+    get memories_path, params: { q: "ライブ", tag_id: rock.id }
+
+    assert_response :success
+    assert_equal [ memory_path(matching) ], css_select("article.memory-card h2 a").map { |link| link["href"] }
+
+    get memories_path, params: { q: "ライブ", tag_id: "" }
+
+    assert_response :success
+    assert_select "article.memory-card", count: 2
+  end
+
+  test "選んだタグに投稿がない場合は検索結果がないと表示する" do
+    tag = create(:tag)
+    create(:memory)
+
+    get memories_path, params: { tag_id: tag.id }
+
+    assert_response :success
+    assert_select ".memories-empty", text: "検索条件に一致する投稿がありません。"
+    assert_select "article.memory-card", count: 0
+  end
+
+  test "検索結果がない場合は専用の案内を表示し空白の検索では全件表示する" do
+    memory = create(:memory)
+
+    get memories_path, params: { q: "該当しないワード" }
+
+    assert_response :success
+    assert_select ".memories-empty", text: "検索条件に一致する投稿がありません。"
+    assert_select "article.memory-card", count: 0
+
+    get memories_path, params: { q: "  " }
+
+    assert_response :success
+    assert_select "article.memory-card h2 a[href=?]", memory_path(memory)
+    assert_select "a", text: "検索をクリア", count: 0
+  end
+
   test "投稿が新しい順に表示される" do
     create(
       :memory,

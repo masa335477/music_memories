@@ -1429,6 +1429,17 @@
   line-height: 1.8;
 }
 
+.memory-search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.memory-search-actions a {
+  color: var(--mm-accent);
+}
+
 .memory-browse-page .memory-card,
 .memory-browse-page .comments-section {
   min-width: 0;
