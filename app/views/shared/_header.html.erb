@@ -16,8 +16,13 @@
         <%= link_to "みんなの投稿", memories_path,
               class: "home-header-nav-link" %>
 
-        <%= link_to "＋ 投稿する", new_memory_path,
-              class: "home-header-button" %>
+        <% editing_memory = controller_name == "memories" &&
+             %w[new create edit update].include?(action_name) %>
+
+        <% unless current_page?(root_path) || editing_memory %>
+          <%= link_to "＋ 投稿する", new_memory_path,
+                class: "home-header-button" %>
+        <% end %>
 
         <%= link_to "アカウント設定", edit_account_path,
               class: "home-header-nav-link" %>
