@@ -25,7 +25,7 @@
 
   <body>
     <%= render "shared/header" %>
-    <%= render "shared/flash" %>
+    <%= render "shared/flash" unless content_for?(:inline_flash) %>
     <%= yield %>
     <%= render "shared/footer" %>
   </body>
