@@ -1,0 +1,50 @@
+<% content_for :title, "アカウント設定 | Music Memories" %>
+
+<main class="account-page">
+  <div class="account-container">
+    <h1>アカウント設定</h1>
+
+    <section class="account-card" aria-labelledby="account-profile-heading">
+      <h2 id="account-profile-heading">ユーザー情報</h2>
+
+      <%= form_with model: @user, url: account_path, method: :patch do |form| %>
+        <% if @user.errors.any? %>
+          <div class="account-errors" role="alert">
+            <p>入力内容を確認してください。</p>
+
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :name, "ユーザー名" %>
+          <%= form.text_field :name,
+                required: true,
+                autocomplete: "nickname" %>
+        </div>
+
+        <div class="account-email">
+          <h3>登録メールアドレス</h3>
+          <p><%= @user.email %></p>
+        </div>
+
+        <div class="signup-submit">
+          <%= form.submit "変更を保存する" %>
+        </div>
+      <% end %>
+    </section>
+
+    <section class="account-card" aria-labelledby="account-password-heading">
+      <h2 id="account-password-heading">パスワード</h2>
+      <p>登録メールアドレスに再設定用のメールを送信できます。</p>
+
+      <%= link_to "パスワードを再設定する", new_password_reset_path %>
+    </section>
+
+    <%= link_to "ホームに戻る", root_path, class: "account-back-link" %>
+  </div>
+</main>

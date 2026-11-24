@@ -2088,3 +2088,102 @@ body {
   background-color: #562b2b;
   color: #ffffff;
 }
+
+/* アカウント設定 */
+.account-page {
+  padding: 40px 20px 64px;
+  color: var(--mm-text);
+}
+
+.account-container {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.account-container h1 {
+  margin: 0 0 28px;
+  font-size: 28px;
+}
+
+.account-card {
+  margin-bottom: 24px;
+  padding: 28px;
+  background-color: var(--mm-surface);
+  border: 1px solid var(--mm-border);
+  border-radius: 12px;
+}
+
+.account-card h2 {
+  margin: 0 0 24px;
+  font-size: 20px;
+}
+
+.account-card p {
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.account-email {
+  margin-bottom: 24px;
+}
+
+.account-email h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.account-email p {
+  margin: 0;
+  color: var(--mm-text-muted);
+}
+
+.account-errors {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #3b2020;
+  color: #f4d4ce;
+  border: 1px solid #a86b62;
+  border-radius: 8px;
+}
+
+.account-errors p {
+  margin: 0 0 8px;
+  font-weight: bold;
+}
+
+.account-errors ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.account-page a,
+.account-page a:visited {
+  color: var(--mm-accent);
+  text-underline-offset: 4px;
+}
+
+.account-page a:hover {
+  color: var(--mm-accent-hover);
+}
+
+.account-page a:focus-visible,
+.account-page input[type="submit"]:focus-visible {
+  outline: 2px solid var(--mm-accent);
+  outline-offset: 4px;
+}
+
+.account-back-link {
+  display: inline-block;
+}
+
+@media (max-width: 600px) {
+  .account-page {
+    padding: 28px 16px 40px;
+  }
+
+  .account-card {
+    padding: 24px 18px;
+  }
+}

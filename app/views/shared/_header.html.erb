@@ -19,6 +19,9 @@
         <%= link_to "＋ 投稿する", new_memory_path,
               class: "home-header-button" %>
 
+        <%= link_to "アカウント設定", edit_account_path,
+              class: "home-header-nav-link" %>
+
         <span class="home-user-name">
           <%= current_user.name %>さん
         </span>
