@@ -38,4 +38,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "home#index"
+
+  # アカウント設定
+  resource :account, only: [ :edit, :update ]
 end
