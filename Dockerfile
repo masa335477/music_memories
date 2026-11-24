@@ -18,6 +18,9 @@ RUN bundle install
 # Railsアプリのコピー
 COPY . .
 
+# 本番用のCSSとJavaScriptをビルド時に生成
+RUN RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
+
 # Renderとローカルで使用するポート
 EXPOSE 3000
 
