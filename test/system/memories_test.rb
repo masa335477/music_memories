@@ -16,8 +16,8 @@ class MemoriesTest < ApplicationSystemTestCase
     log_in(user)
 
     with_spotify_track(track) do
-      within ".site-header" do
-        click_link "＋ 投稿する"
+      within ".home-hero" do
+        click_link "＋ 投稿する", href: new_memory_path
       end
       click_link "楽曲を検索する"
       fill_in "楽曲名・アーティスト名を入力", with: track.fetch("name")
