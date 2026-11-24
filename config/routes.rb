@@ -1,9 +1,35 @@
 Rails.application.routes.draw do
+  resources :memories, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
+    resources :comments, only: [ :create ]
+    resource :like, only: [ :create, :destroy ], controller: :likes
+    resource :listening_interest, only: [ :create, :destroy ]
+  end
+
+  resources :tags, only: [ :show ]
+
+  resources :comments, only: [ :destroy ]
+  # 投稿一覧
+  get "albums", to: "albums#index"
+  get "songs", to: "songs#index"
+  get "albums/suggestions", to: "albums#suggestions", as: :album_suggestions
+  get "songs/suggestions", to: "songs#suggestions", as: :song_suggestions
+  # ログイン/ログアウト
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+  # パスワード再設定
+  resource :password_reset, controller: "passwords", only: [ :new, :create, :edit, :update ]
+  # 新規登録
+  get "sign_up", to: "users#new"
+  post "sign_up", to: "users#create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+
+  get "terms", to: "pages#terms", as: :terms
+  get "privacy", to: "pages#privacy", as: :privacy
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
@@ -12,4 +38,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "home#index"
+
+  # アカウント設定
+  resource :account, only: [ :edit, :update ]
 end

@@ -10,6 +10,9 @@
 # Ignore all environment files.
 /.env*
 
+# インストール用パッケージをGit管理から除外
+*.deb
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
@@ -48,3 +51,5 @@
 # ローカルのGem
 /vendor/bundle/
 
+# テストカバレッジの測定結果
+/coverage/

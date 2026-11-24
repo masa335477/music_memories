@@ -1,0 +1,130 @@
+<main class="memories-page memory-browse-page">
+  <div class="memories-container">
+    <div class="memory-browse-back">
+      <%= link_to "← 投稿一覧へ戻る",
+            memories_path,
+            class: "site-header__button" %>
+    </div>
+
+    <div class="memory-browse-intro">
+      <p class="memory-browse-eyebrow">MUSIC MEMORY</p>
+      <h1 class="memories-page-title">投稿詳細</h1>
+      <p>この音楽に込められた感想や思い出。</p>
+    </div>
+
+    <article class="memory-card memory-detail">
+      <h2><%= @memory.title %></h2>
+
+      <div class="memory-meta">
+        <span>投稿者：<%= @memory.user.name %></span>
+        <time datetime="<%= @memory.created_at.iso8601 %>">
+          <%= @memory.created_at.strftime("%Y/%m/%d %H:%M") %>
+        </time>
+      </div>
+
+      <div class="memory-body">
+        <%= simple_format(@memory.body) %>
+      </div>
+
+      <%= render "memories/music_info", memory: @memory %>
+      <%= render "memories/tags", memory: @memory %>
+
+      <div class="memory-reactions">
+        <% if logged_in? %>
+          <% if current_user.likes.exists?(memory_id: @memory.id) %>
+            <%= button_to "共感を取り消す",
+                  memory_like_path(@memory),
+                  method: :delete,
+                  class: "memories-button" %>
+          <% else %>
+            <%= button_to "共感",
+                  memory_like_path(@memory),
+                  method: :post,
+                  class: "memories-button" %>
+          <% end %>
+
+          <% if current_user.listening_interests.exists?(memory_id: @memory.id) %>
+            <%= button_to "聴いてみたいを解除",
+                  memory_listening_interest_path(@memory),
+                  method: :delete,
+                  class: "memories-button" %>
+          <% else %>
+            <%= button_to "聴いてみたい",
+                  memory_listening_interest_path(@memory),
+                  method: :post,
+                  class: "memories-button" %>
+          <% end %>
+        <% else %>
+          <button type="button" class="memories-button" disabled>
+            共感
+          </button>
+
+          <button type="button" class="memories-button" disabled>
+            聴いてみたい
+          </button>
+
+          <div class="memory-reactions-login">
+            <p>リアクションするにはログインが必要です。</p>
+            <%= link_to "ログイン",
+                  login_path,
+                  class: "memories-button" %>
+          </div>
+        <% end %>
+        <span>共感：<%= @memory.likes.count %>件</span>
+        <span>聴いてみたい：<%= @memory.listening_interests.count %>件</span>
+      </div>
+    </article>
+
+    <section class="comments-section">
+      <h2>コメント（<%= @comments.size %>件）</h2>
+
+      <% if @comments.any? %>
+        <div class="comments-list">
+          <%= render partial: "comments/comment",
+                collection: @comments,
+                as: :comment %>
+        </div>
+      <% else %>
+        <p>まだコメントはありません。</p>
+      <% end %>
+
+      <div class="comment-form-container">
+        <% if logged_in? %>
+          <h3>コメントを投稿する</h3>
+          <%= render "comments/form",
+                memory: @memory,
+                comment: @comment %>
+        <% else %>
+          <div class="comment-login-notice">
+            <p>コメントするにはログインが必要です。</p>
+            <%= link_to "ログインはこちら",
+                  login_path,
+                  class: "memories-button" %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <nav class="memory-navigation" aria-label="ページ移動">
+      <%= link_to "← 投稿一覧に戻る",
+            memories_path,
+            class: "memories-button" %>
+
+      <% if logged_in? && @memory.user_id == current_user.id %>
+        <%= link_to "編集する",
+              edit_memory_path(@memory),
+              class: "memories-button" %>
+
+        <%= button_to "削除する",
+              memory_path(@memory),
+              method: :delete,
+              form: {
+                data: {
+                  turbo_confirm: "この投稿を削除しますか？この操作は取り消せません。"
+                }
+              },
+              class: "memories-button memory-delete-button" %>
+      <% end %>
+    </nav>
+  </div>
+</main>

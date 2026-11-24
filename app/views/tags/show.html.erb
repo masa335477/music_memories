@@ -1,0 +1,53 @@
+<main class="memories-page memory-browse-page">
+  <div class="memories-container">
+    <header class="memories-page-header">
+      <%= link_to "Music Memories", root_path, class: "memory-browse-logo" %>
+
+      <%= link_to "投稿一覧へ戻る",
+            memories_path,
+            class: "memories-button" %>
+    </header>
+
+    <div class="memory-browse-intro">
+      <p class="memory-browse-eyebrow">EXPLORE BY TAG</p>
+      <h1 class="memories-page-title">
+        #<%= @tag.name %> の投稿
+      </h1>
+      <p>このタグが付いた音楽の思い出を探しましょう。</p>
+    </div>
+
+    <% if @memories.empty? %>
+      <p class="memories-empty">
+        このタグが付いた投稿はまだありません。
+      </p>
+    <% else %>
+      <div class="memories-list">
+        <% @memories.each do |memory| %>
+          <article class="memory-card">
+            <h2>
+              <%= link_to memory.title, memory_path(memory) %>
+            </h2>
+
+            <div class="memory-meta">
+              <span>投稿者：<%= memory.user.name %></span>
+              <time datetime="<%= memory.created_at.iso8601 %>">
+                <%= memory.created_at.strftime("%Y/%m/%d %H:%M") %>
+              </time>
+            </div>
+
+            <div class="memory-body">
+              <%= simple_format(memory.body) %>
+            </div>
+
+            <%= render "memories/music_info", memory: memory %>
+            <%= render "memories/tags", memory: memory %>
+
+            <%= link_to "投稿詳細を見る",
+                  memory_path(memory),
+                  class: "memory-detail-link" %>
+          </article>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</main>

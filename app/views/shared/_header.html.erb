@@ -1,0 +1,58 @@
+<header class="site-header">
+  <div class="site-header__container">
+    <%= link_to "Music Memories",
+          root_path,
+          class: "site-header__logo" %>
+
+    <nav class="site-header__actions" aria-label="メインナビゲーション">
+      <% if logged_in? %>
+
+        <%= link_to "ホーム", root_path,
+              class: "home-header-nav-link" %>
+
+        <%= link_to "音楽を探す", songs_path,
+              class: "home-header-nav-link" %>
+
+        <%= link_to "みんなの投稿", memories_path,
+              class: "home-header-nav-link" %>
+
+        <% editing_memory = controller_name == "memories" &&
+             %w[new create edit update].include?(action_name) %>
+
+        <% unless current_page?(root_path) || editing_memory %>
+          <%= link_to "＋ 投稿する", new_memory_path,
+                class: "home-header-button" %>
+        <% end %>
+
+        <%= link_to "アカウント設定", edit_account_path,
+              class: "home-header-nav-link" %>
+
+        <span class="home-user-name">
+          <%= current_user.name %>さん
+        </span>
+
+        <%= button_to "ログアウト", logout_path,
+              method: :delete,
+              class: "home-header-logout" %>
+      <% else %>
+        <%= link_to "ホーム", root_path,
+              class: "home-header-nav-link" %>
+
+        <%= link_to "みんなの投稿", memories_path,
+              class: "home-header-nav-link" %>
+
+        <%= link_to "ログイン", login_path,
+              class: "home-header-button" %>
+
+        <%= link_to "新規登録", sign_up_path,
+              class: "home-header-button" %>
+      <% end %>
+    </nav>
+
+    <% if content_for?(:header_actions) %>
+      <nav class="site-header__page-actions" aria-label="ページ操作">
+        <%= yield :header_actions %>
+      </nav>
+    <% end %>
+  </div>
+</header>

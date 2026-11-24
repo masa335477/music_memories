@@ -1,0 +1,35 @@
+<% content_for :inline_flash, "true" %>
+
+<div class="signup-page">
+  <div class="signup-container">
+    <h1 class="signup-logo">Music Memories</h1>
+    <%= render "shared/flash" %>
+
+    <div class="signup-card">
+      <h2>パスワードの再設定</h2>
+      <p class="signup-description">新しいパスワードを入力してください。</p>
+
+      <%= form_with url: password_reset_path, method: :patch do |form| %>
+        <%= form.hidden_field :token, value: @token %>
+
+        <div class="form-group">
+          <%= form.label :password, "新しいパスワード" %>
+          <%= form.password_field :password, required: true, autocomplete: "new-password" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :password_confirmation, "新しいパスワード（確認）" %>
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+        </div>
+
+        <div class="signup-submit">
+          <%= form.submit "パスワードを更新する" %>
+        </div>
+      <% end %>
+
+      <p class="login-signup-link">
+        <%= link_to "ログインに戻る", login_path %>
+      </p>
+    </div>
+  </div>
+</div>

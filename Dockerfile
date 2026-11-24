@@ -1,4 +1,4 @@
-FROM ruby:3.4.11
+FROM ruby:3.4.13
 WORKDIR /app
 
 # PostgreSQL接続に必要なライブラリ
@@ -6,14 +6,16 @@ RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
       build-essential \
       libpq-dev \
-      postgresql-client && \
+      postgresql-client \
+      chromium \
+      chromium-driver && \
     rm -rf /var/lib/apt/lists/*
 
 # Gemのインストール
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-# Railsアプリをコピー
+# Railsアプリのコピー
 COPY . .
 
 # Renderとローカルで使用するポート

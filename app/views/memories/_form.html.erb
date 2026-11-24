@@ -1,0 +1,65 @@
+<%= form_with model: memory,
+      local: true,
+      class: "memory-compose-form" do |form| %>
+  <%= form.hidden_field :spotify_track_id %>
+  <%= form.hidden_field :spotify_album_id %>
+
+  <div class="memory-compose-field">
+    <%= form.label :title do %>
+      タイトル
+      <span class="memory-compose-required">必須</span>
+    <% end %>
+
+    <%= form.text_field :title,
+          placeholder: "例：何度でも聴きたくなる一枚",
+          class: "memory-compose-input" %>
+  </div>
+
+  <div class="memory-compose-field">
+    <%= form.label :body do %>
+      感想・思い出
+      <span class="memory-compose-required">必須</span>
+    <% end %>
+
+    <%= form.text_area :body,
+          rows: 10,
+          placeholder: "この音楽の好きなところや、聴いたときの思い出を書いてみましょう。",
+          class: "memory-compose-input memory-compose-textarea" %>
+  </div>
+
+  <div class="memory-compose-field">
+    <%= form.label :tag_ids, "タグ（任意）" %>
+
+    <p class="memory-compose-help">
+      投稿に関連するタグを選択してください（複数選択可）。
+    </p>
+
+    <div class="memory-tag-options">
+      <%= form.collection_check_boxes :tag_ids, @tags, :id, :name do |tag| %>
+        <label class="memory-tag-option">
+          <%= tag.check_box %>
+          <%= tag.text %>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="memory-compose-field">
+    <%= form.label :new_tag_name, "新しいタグを作成（任意）" %>
+
+    <%= form.text_field :new_tag_name,
+          maxlength: 30,
+          placeholder: "例：雨の日に聴きたい曲",
+          class: "memory-compose-input" %>
+
+    <p class="memory-compose-help">
+      既存のタグにない場合は、新しいタグを作成できます。
+    </p>
+  </div>
+
+  <div class="memory-compose-actions">
+    <p>投稿は公開されます。</p>
+    <%= form.submit memory.persisted? ? "更新する →" : "投稿する →",
+          class: "memory-compose-submit" %>
+  </div>
+<% end %>

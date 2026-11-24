@@ -1,0 +1,28 @@
+<% content_for :inline_flash, "true" %>
+
+<div class="signup-page">
+  <div class="signup-container">
+    <h1 class="signup-logo">Music Memories</h1>
+    <%= render "shared/flash" %>
+
+    <div class="signup-card">
+      <h2>パスワードの再設定</h2>
+      <p class="signup-description">登録したメールアドレスを入力してください。</p>
+
+      <%= form_with url: password_reset_path, method: :post do |form| %>
+        <div class="form-group">
+          <%= form.label :email, "メールアドレス" %>
+          <%= form.email_field :email, required: true, autocomplete: "email" %>
+        </div>
+
+        <div class="signup-submit">
+          <%= form.submit "再設定メールを送る" %>
+        </div>
+      <% end %>
+
+      <p class="login-signup-link">
+        <%= link_to "ログインに戻る", login_path %>
+      </p>
+    </div>
+  </div>
+</div>
