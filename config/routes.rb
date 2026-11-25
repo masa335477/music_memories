@@ -40,5 +40,7 @@ Rails.application.routes.draw do
   root "home#index"
 
   # アカウント設定
-  resource :account, only: [ :edit, :update ]
+  resource :account, only: [ :edit, :update, :destroy ] do
+    get :withdrawal
+  end
 end
