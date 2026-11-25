@@ -85,6 +85,7 @@ module Spotify
       uri.query = URI.encode_www_form(
         q: search_query,
         type: type,
+        market: "JP",
         limit: limit,
         offset: offset
       )
