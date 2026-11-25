@@ -45,6 +45,12 @@
       <%= link_to "パスワードを再設定する", new_password_reset_path %>
     </section>
 
+    <section class="account-card" aria-labelledby="account-withdrawal-heading">
+      <h2 id="account-withdrawal-heading">退会</h2>
+      <p>アカウントや投稿などの削除内容を確認してから退会できます。</p>
+      <%= link_to "退会手続きへ進む", withdrawal_account_path %>
+    </section>
+
     <%= link_to "ホームに戻る", root_path, class: "account-back-link" %>
   </div>
 </main>
