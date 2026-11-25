@@ -15,6 +15,27 @@ class AccountsController < ApplicationController
     end
   end
 
+  def withdrawal
+  end
+
+  def destroy
+    password = params.permit(:current_password)[:current_password]
+
+    unless password.present? && @user.authenticate(password)
+      flash.now[:alert] = "現在のパスワードが正しくありません。"
+      return render :withdrawal, status: :unprocessable_content
+    end
+
+    result = AccountWithdrawalService.call(user: @user)
+    reset_session
+
+    unless result.notification_sent
+      Rails.logger.warn("退会完了メールの配信に失敗しました (#{result.notification_error.class})")
+    end
+
+    redirect_to root_path, notice: "退会しました。", status: :see_other
+  end
+
   private
 
   def require_login

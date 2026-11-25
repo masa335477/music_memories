@@ -1,0 +1,25 @@
+<% content_for :title, "退会の確認 | Music Memories" %>
+
+<main class="account-page">
+  <div class="account-container">
+    <h1>退会の確認</h1>
+
+    <div class="account-card">
+      <p>退会すると、アカウントとあなたの投稿・コメント・共感・「聴いてみたい」が削除されます。</p>
+      <p><strong>この操作は取り消せません。</strong></p>
+
+      <%= form_with url: account_path, method: :delete do |form| %>
+        <div class="form-group">
+          <%= form.label :current_password, "現在のパスワード" %>
+          <%= form.password_field :current_password, required: true, autocomplete: "current-password" %>
+        </div>
+
+        <div class="signup-submit account-withdrawal-submit">
+          <%= form.submit "アカウントを削除して退会する" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= link_to "アカウント設定に戻る", edit_account_path, class: "account-back-link" %>
+  </div>
+</main>
