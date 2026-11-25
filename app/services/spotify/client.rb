@@ -91,6 +91,7 @@ module Spotify
 
       request = Net::HTTP::Get.new(uri)
       request["Authorization"] = "Bearer #{access_token}"
+      request["Accept-Language"] = "ja"
 
       response = Net::HTTP.start(
         uri.hostname,
@@ -118,6 +119,7 @@ module Spotify
 
       request = Net::HTTP::Get.new(uri)
       request["Authorization"] = "Bearer #{access_token}"
+      request["Accept-Language"] = "ja"
 
       response = Net::HTTP.start(
         uri.hostname,
