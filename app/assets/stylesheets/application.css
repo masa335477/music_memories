@@ -2197,3 +2197,21 @@ body {
 .login-signup-link a:hover {
   color: var(--mm-accent-hover);
 }
+
+/* 投稿一覧・詳細のタグリンク */
+.memory-tag,
+.memory-tag:visited {
+  color: var(--mm-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.memory-tag:hover {
+  color: var(--mm-accent-hover);
+}
+
+.memory-tag:focus-visible {
+  outline: 2px solid var(--mm-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
