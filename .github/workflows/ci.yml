@@ -143,12 +143,20 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: "156"
+          install-chromedriver: true
+
       - name: Run System Tests
         env:
           RAILS_ENV: test
           DB_HOST: localhost
           DB_USERNAME: postgres
           DB_PASSWORD: postgres
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test:system
